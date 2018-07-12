@@ -112,21 +112,26 @@ int main(int argc, char *argv[]){
   gets(str);
   getFrequency(str, freq);
 
-  int letters[26] = { 0 };
+  int letterFreq[26] = { 0 };
 
   printf("\nYou entered: ");
-  for(k = 0; k < 26; k++){
-    printf("%d", freq[k]);
-    letters[k] = freq[k];
+  for(i = 0; i < 26; i++){
+    printf("%d", freq[i]);
+    letterFreq[i] = freq[i];
   }
 
   insertionSort(freq);
   printf("\nAfter sorted: ");
-  for(k = 0; k < 26; k++){
-    printf("%d", freq[k]);
+  for(i = 0; i < 26; i++){
+    printf("%d", freq[i]);
+  }
+  char letters[26] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+  for(i = 0; i < 26; i++){
+    if(letterFreq[i] != 0){
+      printf("\nLetter %c : %d", letters[i], letterFreq[i]);
+    }
   }
 
   int enc[100] = { 0 };
-  
   return 0;
 }
