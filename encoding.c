@@ -1,44 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <math.h>
 
-int freq[26] = { 0 };
-
-/*void buildHuffmanTree(Node **tree){
-    Node *temp;
-    Node *array[26];
-    int i, subTrees = 26;
-    int smallOne,smallTwo;
-
-    for (i=0;i<26;i++){
-      if(freq[i] != 0){
-        array[i] = malloc(sizeof(Node));
-        array[i]->value = freq[i];
-        array[i]->letter = i;
-        array[i]->left = NULL;
-        array[i]->right = NULL;
+/* via : https://www.sanfoundry.com/c-program-sort-array-descending-order/ */
+void insertionSort(int freq[26]){
+  int i,j,a = 0;
+  for (i = 0; i < 26; ++i){
+    for (j = i + 1; j < 26; ++j){
+      if (freq[i] < freq[j]){
+        a = freq[i];
+        freq[i] = freq[j];
+        freq[j] = a;
       }
     }
+  }
+}
 
-    while (subTrees>1){
-        smallOne=findSmaller(array,-1);
-        smallTwo=findSmaller(array,smallOne);
-        temp = array[smallOne];
-        array[smallOne] = malloc(sizeof(Node));
-        array[smallOne]->value=temp->value+array[smallTwo]->value;
-        array[smallOne]->letter=127;
-        array[smallOne]->left=array[smallTwo];
-        array[smallOne]->right=temp;
-        array[smallTwo]->value=-1;
-        subTrees--;
-    }
-
-    *tree = array[smallOne];
-
-    return;
-}*/
-
-void get_frequency(char str[50]){
+void getFrequency(char str[50], int freq[26]){
   int i = 0;
   for(i = 0; str[i] != '\0'; i++){
     if(str[i] =='a'){
@@ -120,20 +99,34 @@ void get_frequency(char str[50]){
         freq[25]++;
     }
   }
+  return;
 }
 
 int main(int argc, char *argv[]){
 
+  int freq[26] = { 0 };
   char str[50], ch;
   int i, k = 0;
 
   printf("Enter the alphabet letters to encode: ");
   gets(str);
-  get_frequency(str);
+  getFrequency(str, freq);
 
+  int letters[26] = { 0 };
+
+  printf("\nYou entered: ");
+  for(k = 0; k < 26; k++){
+    printf("%d", freq[k]);
+    letters[k] = freq[k];
+  }
+
+  insertionSort(freq);
+  printf("\nAfter sorted: ");
   for(k = 0; k < 26; k++){
     printf("%d", freq[k]);
   }
 
+  int enc[100] = { 0 };
+  
   return 0;
 }
