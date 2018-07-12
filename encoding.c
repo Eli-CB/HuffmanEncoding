@@ -6,7 +6,7 @@ int main(int argc, char *argv[]){
 
   char str[50], ch;
   int i, k = 0;
-  int freq[26] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  int freq[26] = { 0 };
 
   printf("Enter the alphabet letters to encode: ");
   gets(str);
