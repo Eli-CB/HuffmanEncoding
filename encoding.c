@@ -224,10 +224,10 @@ int main(int argc, char *argv[]){
   printf("\nCompressed Data Binary: ");
   for (i = 0; i < str_length + 1; i++) {
 
-    itoa(data_stream[i],buffer,2);   // here 2 means binary
-    printf("%s", buffer);
-
-    //printf("%d", data_stream[i]);
+    //itoa(data_stream[i],buffer,2);   // here 2 means binary
+    //printf("%s", buffer);
+    printf("%0*d", 2, data_stream[i]);
+    //printf("%05d", data_stream[i]);
   }
   printf("\n");
 
