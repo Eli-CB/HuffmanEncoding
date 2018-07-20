@@ -115,7 +115,7 @@ int main(int argc, char *argv[]) {
 	int sorted_freq[26] = { 0 };
 	char str[50], ch;
 	int i, j, k = 0;
-	int compressed_data = 0;
+	long compressed_data = 0;
 
 	printf("Enter the alphabet letters to encode: ");
 	gets(str);
@@ -196,7 +196,7 @@ int main(int argc, char *argv[]) {
 		codes[1] = 0b1;
 	}
 	else if (number_of_letters == 3) {
-		codes[0] = 0b0;
+		codes[0] = 0b00;
 		codes[1] = 0b01;
 		codes[2] = 0b11;
 	}
@@ -204,7 +204,7 @@ int main(int argc, char *argv[]) {
 	int bit_to_add = 0;
 	int index = 0;
 	int data_stream[100] = {};
-	printf("\nOriginal String: %s	Length: %d", str, str_length);
+	index++;
 	compressed_data = 1;
 	printf("\nStart Bit '1' is added to the data stream\n");
 	data_stream[0] = compressed_data;
@@ -218,6 +218,7 @@ int main(int argc, char *argv[]) {
 					bit_to_add = codes[j];
 					compressed_data <<= 1;
 					compressed_data += bit_to_add;
+					index++;
 					data_stream[i + 1] = bit_to_add;
 					printf("Added Bit %d to data stream!!\n", bit_to_add);
 				}
@@ -227,24 +228,43 @@ int main(int argc, char *argv[]) {
 				if (str[i] == alpha[j]) {
 					//while (1);
 					bit_to_add = codes[j];
-					if (bit_to_add == 0) {
-						compressed_data <<= 1;
+					if (bit_to_add == 0b00) {
+						compressed_data += bit_to_add;
+						compressed_data <<= 2;
 						data_stream[index + 1] = 0;
-						bit_to_add >>= 1;
 						printf("Added Bit 0 to data stream!!\n");
 						index++;
-						break;
+						data_stream[index + 1] = 0;
+						index++;
+						printf("Added Bit 0 to data stream!!\n");
+						bit_to_add >>= 1;
+						
+						
 					}
-					while (bit_to_add)
-					{
-						if (bit_to_add & 1) {
-							compressed_data <<= 1;
-							compressed_data += 1;
-							data_stream[index + 1] = 1;
-							bit_to_add >>= 1;
-							printf("Added Bit 1 to data stream!!\n");
-							index++;
-						}
+					else if (bit_to_add == 0b01) {
+						compressed_data <<= 1;
+						data_stream[index + 1] = 0;
+						index++;
+						printf("Added Bit 0 to data stream!!\n");
+						compressed_data <<= 1;
+						compressed_data += 1;
+						data_stream[index + 1] = 1;
+						index++;
+						printf("Added Bit 1 to data stream!!\n");
+						bit_to_add >>= 1;
+					}
+					else if (bit_to_add == 0b11) {
+						compressed_data <<= 1;
+						compressed_data += 1;
+						data_stream[index + 1] = 1;
+						index++;
+						printf("Added Bit 1 to data stream!!\n");
+						compressed_data <<= 1;
+						compressed_data += 1;
+						data_stream[index + 1] = 1;
+						index++;
+						printf("Added Bit 1 to data stream!!\n");
+						bit_to_add >>= 1;
 					}
 				}
 			}
@@ -253,7 +273,7 @@ int main(int argc, char *argv[]) {
 
   printf("\nCompressed Data: %d" , compressed_data);
   printf("\nCompressed Data Binary: ");
-  for (i = 0; i < str_length + 1; i++) {
+  for (i = 0; i < index + 1; i++) {
 	  printf("%d", data_stream[i]);
   }
   printf("\n");
@@ -269,17 +289,52 @@ int main(int argc, char *argv[]) {
 	  }
 
   }
-  printf("LMAO not written yet, works in progress...\n");
  
-  while (1);
+  char decompressed_str[100] = { };
+  int pos = str_length - 1;
+  int init_compressed_data = compressed_data;
+  if (number_of_letters == 2) {
+	  printf("Data to Decompress: %d\n", compressed_data);
+	  for (i = 0; i < str_length; i++) {
+		  if (compressed_data & 1) {
+			  printf("Data reamaining.... %d\n", compressed_data);
+			  //compressed_data >>= 1;
+			  printf("Data reamaining after shifting.... %d\n", compressed_data);
+			  decompressed_str[pos] = alpha[1]; pos--;
+			  
+		  }
+		  else 
+		  { 
+			  decompressed_str[pos] = alpha[0]; pos--;
+		  }
+		  compressed_data >>= 1;
+	  }  
+  }
 
-  //printf("\nFirst Letter: %c", alpha[1]);
-  //printf("\nFirst Letter: %c", alpha[2]);
+  else if (number_of_letters == 3) {
+	  for (i = 0; i < index; i+=2) {
+		  if (compressed_data & 1) {
+			  compressed_data >>= 1;
+			  if (compressed_data & 1) {
+				  decompressed_str[pos] = alpha[2]; pos--;
+			  }
+			  else {
+				  decompressed_str[pos] = alpha[1]; pos--;
+			  }
+		  }
+		  else
+		  {
+			  decompressed_str[pos] = alpha[0]; pos--;
+			  compressed_data >>= 1;
+		  }
+		  compressed_data >>= 1;
+	  }
+  }
+  printf("\nOriginal String:	%s	Length: %d	Original Size: %d bits		Compressed Size: %d bits\n", str, str_length, str_length*8, index);
+  printf("Decompressed str:	%s\n", decompressed_str);
   //change to int codes[26] = {0b0, 0b1}; binary
   char  *codes[26] = {0};
   
-
-  //compress(codes[], alpha[]);
 
 
   printf("\nList of letters typed in order of frequency: ");
