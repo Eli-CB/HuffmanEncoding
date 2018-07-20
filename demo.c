@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+#include <stdint.h>
 
-//int codes[2] = { 0 };
+int codes[2] = { 0 };
 
 void insertionSort(int freq[26]){
   int i,j,a = 0;
@@ -104,37 +105,6 @@ void getFrequency(char str[50], int freq[26]){
   return;
 }
 
-void optimal_encoding(int codes[26], int number_of_letters){
-  if(number_of_letters == 2){
-    codes[0] = 0b0;
-    codes[1] = 0b1;
-  }else if(number_of_letters == 3){
-    codes[0] = 0b00;
-    codes[1] = 0b01;
-    codes[2] = 0b10;
-  }else if(number_of_letters == 4){
-    codes[0] = 0b00;
-    codes[1] = 0b01;
-    codes[2] = 0b10;
-    codes[3] = 0b11;
-  }else if (number_of_letters == 5){
-    codes[0] = 0b001;
-    codes[1] = 0b011;
-    codes[2] = 0b0011;
-    codes[3] = 0b1111;
-    codes[4] = 0b0101;
-  }else if (number_of_letters == 6){
-    codes[0] = 0b001;
-    codes[1] = 0b011;
-    codes[2] = 0b0011;
-    codes[3] = 0b1111;
-    codes[4] = 0b0101;
-    codes[5] = 0b0000;
-  }
-  else { system("CLS"); printf("\nFuck you bitch, told you its only works with 7 unique characters..\n and shit it dont even really work with more than 2 yet smh"); while (1); }
-  return;
-}
-
 //void compress(char *codes[26], char alpha[]){
 
 
@@ -194,28 +164,92 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	}
-  int codes[26] = {0};
-  optimal_encoding(codes, number_of_letters);
 
-  int bit_to_add = 0;
-  int data_stream[100] = {  };
-  printf("\nOriginal String: %s	Length: %d", str, str_length);
-  compressed_data = 1;
-  printf("\nStart Bit '1' is added to the data stream\n");
-  data_stream[0] = compressed_data;
-  for (i = 0; i < str_length; i++) {
-	  printf("\nLetter: %c\n", str[i]);
-	  for (j = 0; j <= number_of_letters; j++) {
-		  if (str[i] == alpha[j]) {
-			  //while (1);
-			  bit_to_add = codes[j];
-			  compressed_data <<= 1;
-			  compressed_data += bit_to_add;
-			  data_stream[i + 1] = bit_to_add;
-			  printf("Added Bit %d to data stream!!\n", bit_to_add);
-		  }
-	  }
-  }
+
+
+	/*if (number_of_letters == 2) {
+		while (1);
+		codes[0] = "0";
+		codes[1] = "1";
+		printf("");
+	}
+	else if (number_of_letters == 3) {
+		codes[0] = "00";
+		codes[1] = "01";
+		codes[2] = "11";
+	}
+	else if (number_of_letters == 4) {
+		codes[0] = "001";
+		codes[1] = "011";
+		codes[2] = "0011";
+		codes[3] = "1111";
+	}
+	else if (number_of_letters == 5) {
+		codes[0] = "001";
+		codes[1] = "011";
+		codes[2] = "0011";
+		codes[3] = "1111";
+		codes[4] = "0101";
+	}*/
+	if (number_of_letters == 2) {
+		codes[0] = 0b0;
+		codes[1] = 0b1;
+	}
+	else if (number_of_letters == 3) {
+		codes[0] = 0b0;
+		codes[1] = 0b01;
+		codes[2] = 0b11;
+	}
+	else { system("CLS"); printf("\nFuck you bitch, told you its only works with 2 unique characters..\n"); while (1); }
+	int bit_to_add = 0;
+	int index = 0;
+	int data_stream[100] = {};
+	printf("\nOriginal String: %s	Length: %d", str, str_length);
+	compressed_data = 1;
+	printf("\nStart Bit '1' is added to the data stream\n");
+	data_stream[0] = compressed_data;
+	for (i = 0; i < str_length; i++) {
+		printf("\nLetter: %c\n", str[i]);
+		for (j = 0; j <= number_of_letters; j++) {
+
+			if (number_of_letters == 2) {
+				if (str[i] == alpha[j]) {
+					//while (1);
+					bit_to_add = codes[j];
+					compressed_data <<= 1;
+					compressed_data += bit_to_add;
+					data_stream[i + 1] = bit_to_add;
+					printf("Added Bit %d to data stream!!\n", bit_to_add);
+				}
+			}
+
+			else if (number_of_letters == 3) {
+				if (str[i] == alpha[j]) {
+					//while (1);
+					bit_to_add = codes[j];
+					if (bit_to_add == 0) {
+						compressed_data <<= 1;
+						data_stream[index + 1] = 0;
+						bit_to_add >>= 1;
+						printf("Added Bit 0 to data stream!!\n");
+						index++;
+						break;
+					}
+					while (bit_to_add)
+					{
+						if (bit_to_add & 1) {
+							compressed_data <<= 1;
+							compressed_data += 1;
+							data_stream[index + 1] = 1;
+							bit_to_add >>= 1;
+							printf("Added Bit 1 to data stream!!\n");
+							index++;
+						}
+					}
+				}
+			}
+		}
+	}
 
   printf("\nCompressed Data: %d" , compressed_data);
   printf("\nCompressed Data Binary: ");
@@ -236,11 +270,14 @@ int main(int argc, char *argv[]) {
 
   }
   printf("LMAO not written yet, works in progress...\n");
-
+ 
   while (1);
 
   //printf("\nFirst Letter: %c", alpha[1]);
   //printf("\nFirst Letter: %c", alpha[2]);
+  //change to int codes[26] = {0b0, 0b1}; binary
+  char  *codes[26] = {0};
+  
 
   //compress(codes[], alpha[]);
 
