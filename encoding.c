@@ -104,7 +104,9 @@ void getFrequency(char str[50], int freq[26]){
 }
 
 void optimal_encoding(int codes[26], int number_of_letters){
-  if(number_of_letters == 2){
+  if(number_of_letters == 1){
+    codes[0] = 0b0;
+  }else if(number_of_letters == 2){
     codes[0] = 0b0;
     codes[1] = 0b1;
   }else if(number_of_letters == 3){
@@ -197,7 +199,6 @@ int main(int argc, char *argv[]){
   int codes[26] = {0};
   optimal_encoding(codes, number_of_letters);
 
-
   int bit_to_add = 0;
   int data_stream[100] = {  };
   printf("\nOriginal String: %s	Length: %d", str, str_length);
@@ -217,11 +218,16 @@ int main(int argc, char *argv[]){
       }
     }
   }
+  char buffer[20];
 
   printf("\nCompressed Data: %d" , compressed_data);
   printf("\nCompressed Data Binary: ");
   for (i = 0; i < str_length + 1; i++) {
-    printf("%d", data_stream[i]);
+
+    itoa(data_stream[i],buffer,2);   // here 2 means binary
+    printf("%s", buffer);
+
+    //printf("%d", data_stream[i]);
   }
   printf("\n");
 

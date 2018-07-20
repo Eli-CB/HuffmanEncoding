@@ -111,12 +111,12 @@ void optimal_encoding(int codes[26], int number_of_letters){
   }else if(number_of_letters == 3){
     codes[0] = 0b00;
     codes[1] = 0b01;
-    codes[2] = 0b11;
+    codes[2] = 0b10;
   }else if(number_of_letters == 4){
     codes[0] = 0b00;
-    codes[1] = 0b11;
-    codes[2] = 0b010;
-    codes[3] = 0b101;
+    codes[1] = 0b01;
+    codes[2] = 0b10;
+    codes[3] = 0b11;
   }else if (number_of_letters == 5){
     codes[0] = 0b001;
     codes[1] = 0b011;
