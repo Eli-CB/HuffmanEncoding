@@ -114,7 +114,7 @@ void optimal_encoding(int codes[26], int number_of_letters){
 
 
 //}
-bool safe_add(unsigned long compressed_data, int b) {
+bool safe_add(unsigned long compressed_data) {
   printf("compressed_data = %lu\n", compressed_data);
   //printf("%d: b\n", b);
   //printf("half_int_max - a = %d\n", half_int_max-a);
@@ -242,7 +242,7 @@ int main(int argc, char *argv[]) {
 					bit_to_add = codes[j];
 					compressed_data <<= 1;
           //***figure out how to handle overflow***
-          if(!safe_add(compressed_data, bit_to_add)){
+          if(!safe_add(compressed_data)){
             compressed_data2 = compressed_data;
             compressed_data = 1;
           }
@@ -258,43 +258,40 @@ int main(int argc, char *argv[]) {
 					bit_to_add = codes[j];
 					if (bit_to_add == 0b0) {
 						compressed_data += bit_to_add;
-            if(!safe_add(compressed_data, bit_to_add)){
+            if(!safe_add(compressed_data)){
               compressed_data2 = compressed_data;
               compressed_data = 1;
             }
             add0bit(&compressed_data, data_stream, index);
             index++;
-						bit_to_add >>= 1;
 					}
 					else if (bit_to_add == 0b01) {
-            if(!safe_add(compressed_data, bit_to_add)){
+            if(!safe_add(compressed_data)){
               compressed_data2 = compressed_data;
               compressed_data = 1;
             }
             add0bit(&compressed_data, data_stream, index);
             index++;
-            if(!safe_add(compressed_data, bit_to_add)){
+            if(!safe_add(compressed_data)){
               compressed_data2 = compressed_data;
               compressed_data = 1;
             }
             add1bit(&compressed_data, data_stream, index);
             index++;
-						bit_to_add >>= 1;
 					}
 					else if (bit_to_add == 0b11) {
-            if(!safe_add(compressed_data, bit_to_add)){
+            if(!safe_add(compressed_data)){
               compressed_data2 = compressed_data;
               compressed_data = 1;
             }
             add1bit(&compressed_data, data_stream, index);
             index++;
-            if(!safe_add(compressed_data, bit_to_add)){
+            if(!safe_add(compressed_data)){
               compressed_data2 = compressed_data;
               compressed_data = 1;
             }
             add1bit(&compressed_data, data_stream, index);
             index++;
-						bit_to_add >>= 1;
 					}
 				}
 			}
@@ -304,43 +301,60 @@ int main(int argc, char *argv[]) {
 					bit_to_add = codes[j];
 					if (bit_to_add == 0b00) {
 						compressed_data += bit_to_add;
-						compressed_data <<= 2;
-						data_stream[index + 1] = 0;
-						printf("Added Bit 0 to data stream!!\n");
-						index++;
-						data_stream[index + 1] = 0;
-						index++;
-						printf("Added Bit 0 to data stream!!\n");
-						bit_to_add >>= 1;
-
-
+            if(!safe_add(compressed_data)){
+              compressed_data2 = compressed_data;
+              compressed_data = 1;
+            }
+            add0bit(&compressed_data, data_stream, index);
+            index++;
+            if(!safe_add(compressed_data)){
+              compressed_data2 = compressed_data;
+              compressed_data = 1;
+            }
+            add0bit(&compressed_data, data_stream, index);
+            index++;
 					}
 					else if (bit_to_add == 0b01) {
-            //safe_add(&compressed_data, bit_to_add, &compressed_data2);
+            if(!safe_add(compressed_data)){
+              compressed_data2 = compressed_data;
+              compressed_data = 1;
+            }
             add0bit(&compressed_data, data_stream, index);
             index++;
-            //safe_add(&compressed_data, bit_to_add, &compressed_data2);
+            if(!safe_add(compressed_data)){
+              compressed_data2 = compressed_data;
+              compressed_data = 1;
+            }
             add1bit(&compressed_data, data_stream, index);
             index++;
-						bit_to_add >>= 1;
 					}
 					else if (bit_to_add == 0b10) { //double check this pls
-            //safe_add(&compressed_data, bit_to_add, &compressed_data2);
+            if(!safe_add(compressed_data)){
+              compressed_data2 = compressed_data;
+              compressed_data = 1;
+            }
             add1bit(&compressed_data, data_stream, index);
             index++;
-            //safe_add(&compressed_data, bit_to_add, &compressed_data2);
+            if(!safe_add(compressed_data)){
+              compressed_data2 = compressed_data;
+              compressed_data = 1;
+            }
             add0bit(&compressed_data, data_stream, index);
             index++;
-						bit_to_add >>= 1;
 					}
           else if (bit_to_add == 0b11) {
-            //safe_add(&compressed_data, bit_to_add, &compressed_data2);
+            if(!safe_add(compressed_data)){
+              compressed_data2 = compressed_data;
+              compressed_data = 1;
+            }
             add1bit(&compressed_data, data_stream, index);
             index++;
-            //safe_add(&compressed_data, bit_to_add, &compressed_data2);
+            if(!safe_add(compressed_data)){
+              compressed_data2 = compressed_data;
+              compressed_data = 1;
+            }
             add1bit(&compressed_data, data_stream, index);
             index++;
-						bit_to_add >>= 1;
 					}
 				}
 			}
@@ -349,58 +363,86 @@ int main(int argc, char *argv[]) {
 					//while (1);
 					bit_to_add = codes[j];
 					if (bit_to_add == 0b00) {
-						//compressed_data += bit_to_add;
-            //safe_add(&compressed_data, bit_to_add, &compressed_data2);
+            if(!safe_add(compressed_data)){
+              compressed_data2 = compressed_data;
+              compressed_data = 1;
+            }
             add0bit(&compressed_data, data_stream, index);
             index++;
-            //safe_add(&compressed_data, bit_to_add, &compressed_data2);
+            if(!safe_add(compressed_data)){
+              compressed_data2 = compressed_data;
+              compressed_data = 1;
+            }
             add0bit(&compressed_data, data_stream, index);
             index++;
-						bit_to_add >>= 1;
-
 					}
 					else if (bit_to_add == 0b01) {
-            //compressed_data += bit_to_add;
-            //safe_add(&compressed_data, bit_to_add, &compressed_data2);
+            if(!safe_add(compressed_data)){
+              compressed_data2 = compressed_data;
+              compressed_data = 1;
+            }
             add0bit(&compressed_data, data_stream, index);
             index++;
-            //safe_add(&compressed_data, bit_to_add, &compressed_data2);
+            if(!safe_add(compressed_data)){
+              compressed_data2 = compressed_data;
+              compressed_data = 1;
+            }
             add1bit(&compressed_data, data_stream, index);
             index++;
-						bit_to_add >>= 1;
 					}
           else if (bit_to_add == 0b11) {
-            //safe_add(&compressed_data, bit_to_add, &compressed_data2);
+            if(!safe_add(compressed_data)){
+              compressed_data2 = compressed_data;
+              compressed_data = 1;
+            }
             add1bit(&compressed_data, data_stream, index);
             index++;
-            //safe_add(&compressed_data, bit_to_add, &compressed_data2);
+            if(!safe_add(compressed_data)){
+              compressed_data2 = compressed_data;
+              compressed_data = 1;
+            }
             add1bit(&compressed_data, data_stream, index);
             index++;
-						bit_to_add >>= 1;
 					}
 					else if (bit_to_add == 0b010) { //double check this pls
-            //safe_add(&compressed_data, bit_to_add, &compressed_data2);
+            if(!safe_add(compressed_data)){
+              compressed_data2 = compressed_data;
+              compressed_data = 1;
+            }
             add0bit(&compressed_data, data_stream, index);
             index++;
-            //safe_add(&compressed_data, bit_to_add, &compressed_data2);
+            if(!safe_add(compressed_data)){
+              compressed_data2 = compressed_data;
+              compressed_data = 1;
+            }
             add1bit(&compressed_data, data_stream, index);
             index++;
-            //safe_add(&compressed_data, bit_to_add, &compressed_data2);
+            if(!safe_add(compressed_data)){
+              compressed_data2 = compressed_data;
+              compressed_data = 1;
+            }
             add0bit(&compressed_data, data_stream, index);
             index++;
-						bit_to_add >>= 1;
 					}
           else if (bit_to_add == 0b110) { //double check this pls
-            //safe_add(&compressed_data, bit_to_add, &compressed_data2);
+            if(!safe_add(compressed_data)){
+              compressed_data2 = compressed_data;
+              compressed_data = 1;
+            }
             add1bit(&compressed_data, data_stream, index);
             index++;
-            //safe_add(&compressed_data, bit_to_add, &compressed_data2);
+            if(!safe_add(compressed_data)){
+              compressed_data2 = compressed_data;
+              compressed_data = 1;
+            }
             add1bit(&compressed_data, data_stream, index);
             index++;
-            //safe_add(&compressed_data, bit_to_add, &compressed_data2);
+            if(!safe_add(compressed_data)){
+              compressed_data2 = compressed_data;
+              compressed_data = 1;
+            }
             add0bit(&compressed_data, data_stream, index);
             index++;
-						bit_to_add >>= 1;
 					}
 
 				}
@@ -412,6 +454,7 @@ int main(int argc, char *argv[]) {
   for (i = 0; i < index + 1; i++) {
 	  printf("%d", data_stream[i]);
   }
+  printf("\nLength of Binary: %d", i);
   printf("\n");
 
   int flag = 1;
@@ -525,9 +568,28 @@ int main(int argc, char *argv[]) {
         }
 		  }
 		  compressed_data >>= 1;
-	  }
+      if((compressed_data==1) && (compressed_data2>0)){
+        for (i = 0; i < index; i+=2) {
+    		  if (compressed_data2 & 1) {
+    			  compressed_data2 >>= 1;
+    			  if (compressed_data2 & 1) {
+    				  decompressed_str[pos] = alpha[3]; pos--;
+    			  } else {
+    				  decompressed_str[pos] = alpha[1]; pos--;
+    			  }
+    		  } else {
+            compressed_data2 >>= 1;
+            if (compressed_data2 & 1){
+              decompressed_str[pos] = alpha[2]; pos--;
+            } else {
+    			    decompressed_str[pos] = alpha[0]; pos--;
+            }
+    		  }
+          compressed_data2 >>= 1;
+        }
+      }
+    }
   }
-
   else if (number_of_letters == 5) {
 	  for (i = 0; i < index; i+=2) {
 		  if (compressed_data & 1) {
@@ -543,7 +605,7 @@ int main(int argc, char *argv[]) {
 		  {
         compressed_data >>= 1;
         if (compressed_data & 1){
-          i++;
+          //i++;
           compressed_data >>= 1;
           if(compressed_data & 1){
             decompressed_str[pos] = alpha[4]; pos--;
@@ -557,6 +619,37 @@ int main(int argc, char *argv[]) {
         }
 		  }
 		  compressed_data >>= 1;
+      if((compressed_data==1) && (compressed_data2>0)){
+        for (i = 0; i < index; i+=2) {
+          if (compressed_data2 & 1) {
+            compressed_data2 >>= 1;
+            if (compressed_data2 & 1) {
+              decompressed_str[pos] = alpha[2]; pos--;
+            }
+            else {
+              decompressed_str[pos] = alpha[1]; pos--;
+            }
+          }
+          else
+          {
+            compressed_data2 >>= 1;
+            if (compressed_data2 & 1){
+              //i++;
+              compressed_data2 >>= 1;
+              if(compressed_data2 & 1){
+                decompressed_str[pos] = alpha[4]; pos--;
+              }
+              else {
+                decompressed_str[pos] = alpha[3]; pos--;
+              }
+            }
+            else {
+              decompressed_str[pos] = alpha[0]; pos--;
+            }
+          }
+          compressed_data2 >>= 1;
+        }
+      }
 	  }
   }
   printf("\nOriginal String:	%s	Length: %d	Original Size: %d bits		Compressed Size: %d bits\n", str, str_length, str_length*8, index);
