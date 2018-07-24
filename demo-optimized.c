@@ -137,14 +137,14 @@ void optimal_encoding(int codes[26], int number_of_letters){
   		codes[4] = 0b110;
   		break;
     default:
-      codes[0] = 0b0100;
+        codes[0] = 0b0100;
   		codes[1] = 0b0111;
   		codes[2] = 0b0110;
   		codes[3] = 0b0011;
   		codes[4] = 0b0001;
   		codes[5] = 0b1001;
   		codes[6] = 0b0000;
-		  codes[7] = 0b0101;
+		codes[7] = 0b0101;
   		codes[8] = 0b01000;
   		codes[9] = 0b11000;
   		codes[10] = 0b01011;
