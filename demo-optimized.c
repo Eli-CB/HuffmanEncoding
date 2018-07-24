@@ -166,11 +166,8 @@ void optimal_encoding(int codes[26], int number_of_letters){
   		codes[3] = 0b010;
   		codes[4] = 0b110;
   		break;
-  	} /* 1010", "011110", "10111", , "011111", "11010",
-  				    "", ", "111110000", "111111", "10110","11011", "",
-  				    "11110", "0111001", "11111000101", "", "", , "00011",
-  				    "1111101", "011101", "11111000100", "1111100011", "0111000"
-    	case 6: { //doesn't work
+  	} 
+    	default: { //doesn't work
   		codes[0] = 0b010;
   		codes[1] = 0b0111;
   		codes[2] = 0b0110;
@@ -178,31 +175,32 @@ void optimal_encoding(int codes[26], int number_of_letters){
   		codes[4] = 0b0001;
   		codes[5] = 0b1001;
   		codes[5] = 0b0000;
+		codes[5] = 0b0101;
   		codes[5] = 0b01000;
   		codes[5] = 0b11000;
-  		codes[5] = 0b;
-  		codes[5] = 0b;
-  		codes[5] = 0b;
-  		codes[5] = 0b;
-  		codes[5] = 0b;
-  		codes[5] = 0b;
-  		codes[5] = 0b;
-  		codes[5] = 0b;
-  		codes[5] = 0b;
-  		codes[5] = 0b;
-  		codes[5] = 0b;
-  		codes[5] = 0b;
-  		codes[5] = 0b;
-  		codes[5] = 0b;
-  		codes[5] = 0b;
-  		codes[5] = 0b;
-  		codes[5] = 0b;
+  		codes[5] = 0b01011;
+  		codes[5] = 0b11101;
+  		codes[5] = 0b01111;
+  		codes[5] = 0b11000;
+  		codes[5] = 0b01101;
+  		codes[5] = 0b11011;
+  		codes[5] = 0b011110;
+  		codes[5] = 0b111110;
+  		codes[5] = 0b111111;
+  		codes[5] = 0b101110;
+  		codes[5] = 0b1001110;
+  		codes[5] = 0b0001110;
+  		codes[5] = 0b1011111;
+  		codes[5] = 0b000011111;
+  		codes[5] = 0b1100011111;
+  		codes[5] = 0b10100011111;
+  		codes[5] = 0b00100011111;
   		break;
-  	}*/
-  	default: {
+  	}
+  /*	default: {
   	   printf("\nUse less than 6 characters.\n");            //***********OPTIMIZED
   	    break;
-  	}
+  	}*/
   }
 
 }
