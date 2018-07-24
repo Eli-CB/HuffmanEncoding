@@ -155,14 +155,14 @@ void decompress2(int str_length, unsigned char decompressed_str[200], unsigned l
 
 void add0bit(unsigned long *compressed_data, int data_stream[100], int a){
   *compressed_data <<= 1;
-  data_stream[a + 1] = 0;
+  data_stream[a] = 0;
   printf("Added Bit 0 to data stream!!\n");
 }
 
 void add1bit(unsigned long *compressed_data, int data_stream[100], int a){
   *compressed_data <<= 1;
   *compressed_data += 1;
-  data_stream[a + 1] = 1;
+  data_stream[a] = 1;
   printf("Added Bit 1 to data stream!!\n");
 }
 
@@ -463,7 +463,7 @@ int main(int argc, char *argv[]) {
 	}
   printf("\nCompressed Data: %lu" , compressed_data + compressed_data2);
   printf("\nCompressed Data Binary: ");
-  for (i = 0; i < index + 1; i++) {
+  for (i = 0; i < index; i++) {
 	  printf("%d", data_stream[i]);
   }
   printf("\nLength of Binary: %d", i);
