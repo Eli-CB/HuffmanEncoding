@@ -136,14 +136,6 @@ void optimal_encoding(int codes[26], int number_of_letters){
   		codes[3] = 0b010;
   		codes[4] = 0b110;
   		break;
-    case 6:
-      codes[0] = 0b01;
-      codes[1] = 0b000;
-      codes[2] = 0b010;
-      codes[3] = 0b100;
-      codes[4] = 0b011;
-      codes[5] = 0b111;
-      break;
     default:
       codes[0] = 0b010;
   		codes[1] = 0b0111;
