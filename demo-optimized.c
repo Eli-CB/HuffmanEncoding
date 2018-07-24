@@ -219,17 +219,33 @@ bool safe_add(unsigned int compressed_data) {
 
 void add0bit(unsigned int *compressed_data, int data_stream[100], int a){
   *compressed_data <<= 1;
-  data_stream[a + 1] = 0;
+  data_stream[a] = 0;
   printf("Added Bit 0 to data stream!!\n");
 }
 
 void add1bit(unsigned int *compressed_data, int data_stream[100], int a){
   *compressed_data <<= 1;
   *compressed_data += 1;
-  data_stream[a + 1] = 1;
+  data_stream[a] = 1;
   printf("Added Bit 1 to data stream!!\n");
 }
 
+bool checkValid(char **input) {
+	int i;
+	bool notValid = true;
+	int len = strlen(*input);
+	for (i = 0; i < len; i++) {
+	   //if ((*input)[i] == ' ') {
+	//	printf("Don't use spaces!");
+//		notValid = false;	
+	//}	  
+ 	if ((*input)[i] <= 96 || (*input)[i] >= 123) {
+  	    	printf("%c isn't a valid input!\n",(*input)[i]);
+		notValid = false;
+	   } 
+	} 	
+	return notValid;
+}
 int main() {                                  //***********OPTIMIZED
 	int sorted_freq[26] = { 0 };
 	// Change from char str[200] to char* str
@@ -241,7 +257,9 @@ int main() {                                  //***********OPTIMIZED
 
 	printf("Enter the alphabet letters to encode: ");
 	scanf("%s", str); //Replaced gets function with a scanf function
-
+	if (!checkValid(&str)) {
+	    return 0;
+	}	
 	getFrequency(str, sorted_freq);
 
 	int unsorted_letterFreq[26] = { 0 };
@@ -530,7 +548,7 @@ int main() {                                  //***********OPTIMIZED
 	}
   printf("\nCompressed Data: %d" , compressed_data + compressed_data2);
   printf("\nCompressed Data Binary: ");
-  for (i = 0; i < index + 1; i++) {
+  for (i = 0; i < index; i++) {
 	  printf("%d", data_stream[i]);
   }
   printf("\nLength of Binary: %d", i);
