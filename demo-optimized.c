@@ -20,7 +20,7 @@ void insertionSort(int freq[26]){
 }
 
 // Gets the frequency of each letter entered: enables optimal encodings
-void getFrequency(char* str, int freq[26]){ //ADDED a "*" for char str :) 
+void getFrequency(char* str, int freq[26]){ //ADDED a "*" for char str :)
   int i = 0;
   for(i = 0; str[i] != '\0'; i++){
     if(str[i] =='a'){
@@ -108,7 +108,10 @@ void optimal_encoding(int codes[26], int number_of_letters){
     codes[3] = 0b100;
     codes[4] = 0b011;
     codes[5] = 0b111;
-  }else { system("CLS"); printf("\nTold you its only works with 6 unique characters..\n"); while (1); }
+  }else {
+    printf("\nUse less than 6 characters.\n");            //***********OPTIMIZED
+  }
+
 }
 //void compress(char *codes[26], char alpha[]){
 
@@ -166,23 +169,22 @@ void add1bit(unsigned long *compressed_data, int data_stream[100], int a){
   printf("Added Bit 1 to data stream!!\n");
 }
 
-int main(int argc, char *argv[]) {
-  //printf("%llu", ULONG_LONG_MAX);
+int main() {                                  //***********OPTIMIZED
 	int sorted_freq[26] = { 0 };
-	// Change from char str[200] to cahr* str
+	// Change from char str[200] to char* str
 	char* str;
-	str = (char*)malloc(65 * sizeof(char));
+	str = (char*)malloc(65 * sizeof(char));     //***********OPTIMIZED
 	int i, j, k = 0;
 	unsigned long compressed_data = 0;
 
-	
-	
+
+
 	printf("Enter the alphabet letters to encode: ");
 	scanf("%s", str); //Replaced gets function with a scanf function
-	
 
-	
-	
+
+
+
 	getFrequency(str, sorted_freq);
 
 	int unsorted_letterFreq[26] = { 0 };
@@ -478,7 +480,7 @@ int main(int argc, char *argv[]) {
 
   }
   //Changed unsigned char decompressed_str[200] = { }; to the following...
-  unsigned char* decompressed_str;
+  unsigned char* decompressed_str;                      //***********OPTIMIZED
   decompressed_str = (unsigned char*)malloc((str_length + 1) * sizeof(unsigned char));
   int pos = str_length - 1;
   if(number_of_letters == 2){
@@ -518,12 +520,8 @@ int main(int argc, char *argv[]) {
   }*/
 
   if (number_of_letters == 3) {
-	  printf ("Index: %d\n", index);
 	  for (i = 0; i < str_length; i++) {
-		  printf ("Index: %d\n", i);
 		  if (compressed_data & 1) {
-			//i++;
-		
 			  compressed_data >>= 1;
 			  if (compressed_data & 1) {
 				  decompressed_str[pos] = alpha[2]; pos--;
@@ -538,11 +536,8 @@ int main(int argc, char *argv[]) {
 		  }
 		  compressed_data >>= 1;
       if((compressed_data==1) && (compressed_data2>0)){
-		  printf ("Index: %d\n", i);
         for (i = 0; i < str_length; i++) {
     		  if (compressed_data2 & 1) {
-				//i++;
-			
     			  compressed_data2 >>= 1;
     			  if (compressed_data2 & 1) {
     				  decompressed_str[pos] = alpha[2]; pos--;
@@ -562,7 +557,7 @@ int main(int argc, char *argv[]) {
   }
 
   else if (number_of_letters == 4) {
-	  for (i = 0; i < index; i+=2) {
+	  for (i = 0; i < str_length; i++) {
 		  if (compressed_data & 1) {
 			  compressed_data >>= 1;
 			  if (compressed_data & 1) {
@@ -584,7 +579,7 @@ int main(int argc, char *argv[]) {
 		  }
 		  compressed_data >>= 1;
       if((compressed_data==1) && (compressed_data2>0)){
-        for (i = 0; i < index; i+=2) {
+        for (i = 0; i < str_length; i++) {
     		  if (compressed_data2 & 1) {
     			  compressed_data2 >>= 1;
     			  if (compressed_data2 & 1) {
@@ -606,7 +601,7 @@ int main(int argc, char *argv[]) {
     }
   }
   else if (number_of_letters == 5) {
-	  for (i = 0; i < index; i+=2) {
+	  for (i = 0; i < str_length; i++) {
 		  if (compressed_data & 1) {
 			  compressed_data >>= 1;
 			  if (compressed_data & 1) {
@@ -620,7 +615,6 @@ int main(int argc, char *argv[]) {
 		  {
         compressed_data >>= 1;
         if (compressed_data & 1){
-          //i++;
           compressed_data >>= 1;
           if(compressed_data & 1){
             decompressed_str[pos] = alpha[4]; pos--;
@@ -635,7 +629,7 @@ int main(int argc, char *argv[]) {
 		  }
 		  compressed_data >>= 1;
       if((compressed_data==1) && (compressed_data2>0)){
-        for (i = 0; i < index; i+=2) {
+        for (i = 0; i < str_length; i++) {
           if (compressed_data2 & 1) {
             compressed_data2 >>= 1;
             if (compressed_data2 & 1) {
@@ -649,7 +643,6 @@ int main(int argc, char *argv[]) {
           {
             compressed_data2 >>= 1;
             if (compressed_data2 & 1){
-              //i++;
               compressed_data2 >>= 1;
               if(compressed_data2 & 1){
                 decompressed_str[pos] = alpha[4]; pos--;
@@ -672,14 +665,10 @@ int main(int argc, char *argv[]) {
   //free memory...
   str = NULL;
   decompressed_str = NULL;
-  free(str); 
+  free(str);
   free(decompressed_str);
 
-  printf("\nList of letters typed in order of frequency: ");
-  size_t n = sizeof(alpha);
-  for(i = 0; i<n; i++){
-    printf("%c", alpha[i]);
-  }	  
-  
+                                              //***********OPTIMIZED
+
   return 0;
 }
