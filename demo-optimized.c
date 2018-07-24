@@ -22,94 +22,187 @@ void insertionSort(int freq[26]){
 // Gets the frequency of each letter entered: enables optimal encodings
 void getFrequency(char* str, int freq[26]){ //ADDED a "*" for char str :)
   int i = 0;
-  for(i = 0; str[i] != '\0'; i++){
-    if(str[i] =='a'){
-      freq[0]++;
-    }else if(str[i] =='b'){
-      freq[1]++;
-    }else if(str[i] =='c'){
-      freq[2]++;
-    }else if(str[i] =='d'){
-      freq[3]++;
-    }else if(str[i] =='e'){
-      freq[4]++;
-    }else if(str[i] =='f'){
-      freq[5]++;
-    }else if(str[i] =='g'){
-      freq[6]++;
-    }else if(str[i] =='h'){
-      freq[7]++;
-    }else if(str[i] =='i'){
-      freq[8]++;
-    }else if(str[i] =='j'){
-      freq[9]++;
-    }else if(str[i] =='k'){
-      freq[10]++;
-    }else if(str[i] =='l'){
-      freq[11]++;
-    }else if(str[i] =='m'){
-      freq[12]++;
-    }else if(str[i] =='n'){
-      freq[13]++;
-    }else if(str[i] =='o'){
-      freq[14]++;
-    }else if(str[i] =='p'){
-      freq[15]++;
-    }else if(str[i] =='q'){
-      freq[16]++;
-    }else if(str[i] =='r'){
-      freq[17]++;
-    }else if(str[i] =='s'){
-      freq[18]++;
-    }else if(str[i] =='t'){
-      freq[19]++;
-    }else if(str[i] =='u'){
-      freq[20]++;
-    }else if(str[i] =='v'){
-      freq[21]++;
-    }else if(str[i] =='w'){
-      freq[22]++;
-    }else if(str[i] =='x'){
-      freq[23]++;
-    }else if(str[i] =='y'){
-      freq[24]++;
-    }else if(str[i] =='z'){
-      freq[25]++;
+while(str[i] != '\0') {
+      switch(str[i]) {
+		  case 'a': {
+			  freq[0]++;
+			  break;
+		  }
+		  case 'b': {
+			  freq[1]++;
+			   break;
+		  }
+		  case 'c': {
+			  freq[2]++;
+		   	  break;
+		  }
+		  case 'd': {
+			  freq[3]++;
+			  break;
+		  }
+		  case 'e': {
+			  freq[4]++;
+			  break;
+		  }
+		  case 'f': {
+			  freq[5]++;
+			  break;
+	  	  }
+		  case 'g': {
+			  freq[6]++;
+			  break;
+		  }
+		  case 'h': {
+		  	  freq[7]++;
+			  break;
+		  }
+		  case 'i': {
+		  	  freq[8]++;
+			  break;
+		  }
+		  case 'j': {
+	   		  freq[9]++;
+			  break;
+		  }
+		  case 'k': {
+			  freq[10]++;
+			  break;
+		  }
+	  	  case 'l': {
+			  freq[11]++;
+			  break;
+		  }
+		  case 'm': {
+			  freq[12]++;
+			  break;
+		  }
+		  case 'n': {
+			  freq[13]++;
+			  break;
+		  }
+		  case 'o': {
+		 	  freq[14]++;
+			  break;
+		  }
+		  case 'p': {
+			  freq[15]++;
+			  break;
+		  }
+		  case 'q': {
+			  freq[16]++;
+			  break;
+		  }
+		  case 'r': {
+			  freq[17]++;
+			  break;
+		  }
+		  case 's': {
+			  freq[18]++;
+			  break;
+		  }
+		  case 't': {
+			  freq[19]++;
+			  break;
+		  }
+		  case 'u': {
+			  freq[20]++;
+			  break;
+		  }
+		  case 'v': {
+			  freq[21]++;
+			  break;
+		  }
+		  case 'w': {
+			  freq[22]++;
+			  break;
+		  }
+		  case 'x': {
+			  freq[23]++;
+			  break;
+		  }
+		  case 'y': {
+			  freq[24]++;
+			  break;
+		  }
+		  case 'z': {
+		      freq[25]++;
+			  break;
+		  }
+	   }
+	   i++;
     }
-  }
-  return;
+	    return;
 }
 
+//ADDED SWITCH STATEMENT OPTIMIZED
 void optimal_encoding(int codes[26], int number_of_letters){
-  if(number_of_letters == 1){
-    codes[0] = 0b0;
-  }else if (number_of_letters == 2){
-    codes[0] = 0b0;
-    codes[1] = 0b1;
-  }else if (number_of_letters == 3){
-    codes[0] = 0b0;
-    codes[1] = 0b01;
-    codes[2] = 0b11;
-  }else if(number_of_letters == 4){
-    codes[0] = 0b00;
-    codes[1] = 0b01;
-    codes[2] = 0b10;
-    codes[3] = 0b11;
-  }else if(number_of_letters == 5){
-    codes[0] = 0b00;
-    codes[1] = 0b01;
-    codes[2] = 0b11;
-    codes[3] = 0b010;
-    codes[4] = 0b110;
-  }else if (number_of_letters == 6){ //most efficient
-    codes[0] = 0b01;
-    codes[1] = 0b000;
-    codes[2] = 0b010;
-    codes[3] = 0b100;
-    codes[4] = 0b011;
-    codes[5] = 0b111;
-  }else {
-    printf("\nUse less than 6 characters.\n");            //***********OPTIMIZED
+  switch(number_of_letters) {
+  	case 1: {
+  		codes[0] = 0b0;
+  		break;
+  	}
+  	case 2: {
+  		codes[0] = 0b0;
+  		codes[1] = 0b1;
+  		break;
+  	}
+  	case 3: {
+  		codes[0] = 0b0;
+  		codes[1] = 0b01;
+  		codes[2] = 0b11;
+  		break;
+  	}
+  	case 4: {
+  		codes[0] = 0b00;
+  		codes[1] = 0b01;
+  		codes[2] = 0b10;
+  		codes[3] = 0b11;
+  		break;
+  	}
+  	case 5: {
+  		codes[0] = 0b00;
+  		codes[1] = 0b01;
+  		codes[2] = 0b11;
+  		codes[3] = 0b010;
+  		codes[4] = 0b110;
+  		break;
+  	} /* 1010", "011110", "10111", , "011111", "11010",
+  				    "", ", "111110000", "111111", "10110","11011", "",
+  				    "11110", "0111001", "11111000101", "", "", , "00011",
+  				    "1111101", "011101", "11111000100", "1111100011", "0111000"
+    	case 6: { //doesn't work
+  		codes[0] = 0b010;
+  		codes[1] = 0b0111;
+  		codes[2] = 0b0110;
+  		codes[3] = 0b0011;
+  		codes[4] = 0b0001;
+  		codes[5] = 0b1001;
+  		codes[5] = 0b0000;
+  		codes[5] = 0b01000;
+  		codes[5] = 0b11000;
+  		codes[5] = 0b;
+  		codes[5] = 0b;
+  		codes[5] = 0b;
+  		codes[5] = 0b;
+  		codes[5] = 0b;
+  		codes[5] = 0b;
+  		codes[5] = 0b;
+  		codes[5] = 0b;
+  		codes[5] = 0b;
+  		codes[5] = 0b;
+  		codes[5] = 0b;
+  		codes[5] = 0b;
+  		codes[5] = 0b;
+  		codes[5] = 0b;
+  		codes[5] = 0b;
+  		codes[5] = 0b;
+  		codes[5] = 0b;
+  		break;
+  	}*/
+  	default: {
+  	   printf("\nUse less than 6 characters.\n");            //***********OPTIMIZED
+  	    break;
+  	}
   }
 
 }
