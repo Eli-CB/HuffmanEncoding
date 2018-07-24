@@ -24,110 +24,84 @@ void getFrequency(char* str, int freq[26]){ //ADDED a "*" for char str :)
   int i = 0;
 while(str[i] != '\0') {
       switch(str[i]) {
-		  case 'a': {
+		  case 'a':
 			  freq[0]++;
 			  break;
-		  }
-		  case 'b': {
+		  case 'b':
 			  freq[1]++;
 			   break;
-		  }
-		  case 'c': {
+		  case 'c':
 			  freq[2]++;
 		   	  break;
-		  }
-		  case 'd': {
+		  case 'd':
 			  freq[3]++;
 			  break;
-		  }
-		  case 'e': {
+		  case 'e':
 			  freq[4]++;
 			  break;
-		  }
-		  case 'f': {
+		  case 'f':
 			  freq[5]++;
 			  break;
-	  	  }
-		  case 'g': {
+		  case 'g':
 			  freq[6]++;
 			  break;
-		  }
-		  case 'h': {
+		  case 'h':
 		  	  freq[7]++;
 			  break;
-		  }
-		  case 'i': {
+		  case 'i':
 		  	  freq[8]++;
 			  break;
-		  }
-		  case 'j': {
+		  case 'j':
 	   		  freq[9]++;
 			  break;
-		  }
-		  case 'k': {
+		  case 'k':
 			  freq[10]++;
 			  break;
-		  }
-	  	  case 'l': {
+	  	  case 'l':
 			  freq[11]++;
 			  break;
-		  }
-		  case 'm': {
+		  case 'm':
 			  freq[12]++;
 			  break;
-		  }
-		  case 'n': {
+		  case 'n':
 			  freq[13]++;
 			  break;
-		  }
-		  case 'o': {
+		  case 'o':
 		 	  freq[14]++;
 			  break;
-		  }
-		  case 'p': {
+		  case 'p':
 			  freq[15]++;
 			  break;
-		  }
-		  case 'q': {
+		  case 'q':
 			  freq[16]++;
 			  break;
-		  }
-		  case 'r': {
+		  case 'r':
 			  freq[17]++;
 			  break;
-		  }
-		  case 's': {
+		  case 's':
 			  freq[18]++;
 			  break;
-		  }
-		  case 't': {
+		  case 't':
 			  freq[19]++;
 			  break;
-		  }
-		  case 'u': {
+		  case 'u':
 			  freq[20]++;
 			  break;
-		  }
-		  case 'v': {
+		  case 'v':
 			  freq[21]++;
 			  break;
-		  }
-		  case 'w': {
+		  case 'w':
 			  freq[22]++;
 			  break;
-		  }
-		  case 'x': {
+		  case 'x':
 			  freq[23]++;
 			  break;
-		  }
-		  case 'y': {
+		  case 'y':
 			  freq[24]++;
 			  break;
-		  }
-		  case 'z': {
+		  case 'z':
 		      freq[25]++;
 			  break;
-		  }
 	   }
 	   i++;
     }
@@ -137,72 +111,62 @@ while(str[i] != '\0') {
 //ADDED SWITCH STATEMENT OPTIMIZED
 void optimal_encoding(int codes[26], int number_of_letters){
   switch(number_of_letters) {
-  	case 1: {
+  	case 1:
   		codes[0] = 0b0;
   		break;
-  	}
-  	case 2: {
+  	case 2:
   		codes[0] = 0b0;
   		codes[1] = 0b1;
   		break;
-  	}
-  	case 3: {
+  	case 3:
   		codes[0] = 0b0;
   		codes[1] = 0b01;
   		codes[2] = 0b11;
   		break;
-  	}
-  	case 4: {
+  	case 4:
   		codes[0] = 0b00;
   		codes[1] = 0b01;
   		codes[2] = 0b10;
   		codes[3] = 0b11;
   		break;
-  	}
-  	case 5: {
+  	case 5:
   		codes[0] = 0b00;
   		codes[1] = 0b01;
   		codes[2] = 0b11;
   		codes[3] = 0b010;
   		codes[4] = 0b110;
   		break;
-  	} 
-    	default: { //doesn't work
-  		codes[0] = 0b010;
+    default:
+      codes[0] = 0b0100;
   		codes[1] = 0b0111;
   		codes[2] = 0b0110;
   		codes[3] = 0b0011;
   		codes[4] = 0b0001;
   		codes[5] = 0b1001;
-  		codes[5] = 0b0000;
-		codes[5] = 0b0101;
-  		codes[5] = 0b01000;
-  		codes[5] = 0b11000;
-  		codes[5] = 0b01011;
-  		codes[5] = 0b11101;
-  		codes[5] = 0b01111;
-  		codes[5] = 0b11000;
-  		codes[5] = 0b01101;
-  		codes[5] = 0b11011;
-  		codes[5] = 0b011110;
-  		codes[5] = 0b111110;
-  		codes[5] = 0b111111;
-  		codes[5] = 0b101110;
-  		codes[5] = 0b1001110;
-  		codes[5] = 0b0001110;
-  		codes[5] = 0b1011111;
-  		codes[5] = 0b000011111;
-  		codes[5] = 0b1100011111;
-  		codes[5] = 0b10100011111;
-  		codes[5] = 0b00100011111;
+  		codes[6] = 0b0000;
+		  codes[7] = 0b0101;
+  		codes[8] = 0b01000;
+  		codes[9] = 0b11000;
+  		codes[10] = 0b01011;
+  		codes[11] = 0b11101;
+  		codes[12] = 0b01111;
+  		codes[13] = 0b11000;
+  		codes[14] = 0b01101;
+  		codes[15] = 0b11011;
+  		codes[16] = 0b011110;
+  		codes[17] = 0b111110;
+  		codes[18] = 0b111111;
+  		codes[19] = 0b101110;
+  		codes[20] = 0b1001110;
+  		codes[21] = 0b0001110;
+  		codes[22] = 0b1011111;
+  		codes[23] = 0b000011111;
+  		codes[24] = 0b1100011111;
+  		codes[25] = 0b10100011111;
+  		codes[26] = 0b00100011111;
   		break;
-  	}
-  /*	default: {
-  	   printf("\nUse less than 6 characters.\n");            //***********OPTIMIZED
-  	    break;
-  	}*/
-  }
 
+  }
 }
 
 bool safe_add(unsigned int compressed_data) {
@@ -211,7 +175,7 @@ bool safe_add(unsigned int compressed_data) {
   int result = half_int_max - compressed_data;
 
   if (result < 0) {
-    printf("************HANDLE OVERFLOW************\n");
+    printf("\n************HANDLE OVERFLOW************\n");
     return false;
   }
   return true;
@@ -235,17 +199,18 @@ bool checkValid(char **input) {
 	bool notValid = true;
 	int len = strlen(*input);
 	for (i = 0; i < len; i++) {
-	   //if ((*input)[i] == ' ') {
-	//	printf("Don't use spaces!");
-//		notValid = false;	
-	//}	  
- 	if ((*input)[i] <= 96 || (*input)[i] >= 123) {
-  	    	printf("%c isn't a valid input!\n",(*input)[i]);
-		notValid = false;
-	   } 
-	} 	
+	  // if ((*input)[i] == ('\x20')) {
+	  //   printf("Don't use spaces!");
+	  //   notValid = false;
+    // }
+ 	  if ((*input)[i] <= 96 || (*input)[i] >= 123) {
+  	  printf("%c isn't a valid input!\n",(*input)[i]);
+		  notValid = false;
+	  }
+	}
 	return notValid;
 }
+
 int main() {                                  //***********OPTIMIZED
 	int sorted_freq[26] = { 0 };
 	// Change from char str[200] to char* str
@@ -255,11 +220,11 @@ int main() {                                  //***********OPTIMIZED
 	unsigned int compressed_data = 0;           //***********OPTIMIZED
                                               //unsigned long int not supported by 32 bit system
 
-	printf("Enter the alphabet letters to encode: ");
-	scanf("%s", str); //Replaced gets function with a scanf function
-	if (!checkValid(&str)) {
-	    return 0;
-	}	
+	do {
+    printf("Enter the alphabet letters to encode: ");
+    scanf("%s", str);
+	}while(!checkValid(&str));
+  
 	getFrequency(str, sorted_freq);
 
 	int unsorted_letterFreq[26] = { 0 };
