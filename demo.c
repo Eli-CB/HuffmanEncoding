@@ -108,7 +108,7 @@ void optimal_encoding(int codes[26], int number_of_letters){
     codes[3] = 0b100;
     codes[4] = 0b011;
     codes[5] = 0b111;
-  }else { system("CLS"); printf("\nTold you its only works with 6 unique characters..\n"); while (1); }
+  }else { system("CLS"); printf("\nUse less than 6 characters\n"); while (1); }
 }
 //void compress(char *codes[26], char alpha[]){
 
@@ -235,7 +235,19 @@ int main(int argc, char *argv[]) {
 	for (i = 0; i < str_length; i++) {
 		printf("\nLetter: %c\n", str[i]);
 		for (j = 0; j <= number_of_letters; j++) {
+      if (number_of_letters == 1) {
+        if (str[i] == alpha[j]) {
+					bit_to_add = codes[j];
+					compressed_data <<= 1;
+          if(!safe_add(compressed_data)){
+            compressed_data2 = compressed_data;
+            compressed_data = 1;
+          }
+          add0bit(&compressed_data, data_stream, index);
+          index++;
+        }
 
+      }
 			if (number_of_letters == 2) {
 				if (str[i] == alpha[j]) {
 					//while (1);
@@ -474,7 +486,18 @@ int main(int argc, char *argv[]) {
   if(number_of_letters == 2){
     decompress2(str_length, decompressed_str, compressed_data, compressed_data2, alpha);
   }
-
+  if (number_of_letters == 1){
+    for (i = 0; i < str_length; i++) {
+      decompressed_str[pos] = alpha[0]; pos--;
+      compressed_data >>= 1;
+      if((compressed_data==1) && (compressed_data2>0)){
+        for (i = 0; i < str_length; i++) {
+          decompressed_str[pos] = alpha[0]; pos--;
+          compressed_data2 >>= 1;
+        }
+      }
+    }
+  }
 
   /*if (number_of_letters == 2) {
 	  printf("Data to Decompress: %d\n", compressed_data);
@@ -510,7 +533,7 @@ int main(int argc, char *argv[]) {
   if (number_of_letters == 3) {
 	  for (i = 0; i < index; i++) {
 		  if (compressed_data & 1) {
-        i++;
+        //i++;
 			  compressed_data >>= 1;
 			  if (compressed_data & 1) {
 				  decompressed_str[pos] = alpha[2]; pos--;
@@ -527,7 +550,7 @@ int main(int argc, char *argv[]) {
       if((compressed_data==1) && (compressed_data2>0)){
         for (i = 0; i < index; i++) {
     		  if (compressed_data2 & 1) {
-            i++;
+            //i++;
     			  compressed_data2 >>= 1;
     			  if (compressed_data2 & 1) {
     				  decompressed_str[pos] = alpha[2]; pos--;
@@ -547,7 +570,7 @@ int main(int argc, char *argv[]) {
   }
 
   else if (number_of_letters == 4) {
-	  for (i = 0; i < index; i+=2) {
+	  for (i = 0; i < index; i++) {
 		  if (compressed_data & 1) {
 			  compressed_data >>= 1;
 			  if (compressed_data & 1) {

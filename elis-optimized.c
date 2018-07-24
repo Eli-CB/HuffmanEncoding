@@ -132,6 +132,30 @@ bool safe_add(unsigned long compressed_data) {
   return true;
 }
 
+void decompress2(int str_length, unsigned char decompressed_str[200], unsigned long compressed_data, unsigned long compressed_data2, char alpha[26]){
+  int i = 0;
+  int pos = str_length-1;
+
+  for (i = 0; i < str_length; i++) {
+	  if (compressed_data & 1) {
+		  decompressed_str[pos] = alpha[1]; pos--;
+	  }else{
+		  decompressed_str[pos] = alpha[0]; pos--;
+	  }
+	  compressed_data >>= 1;
+    if((compressed_data==1) && (compressed_data2>0)){
+      for (i = 0; i < str_length; i++) {
+  		  if (compressed_data2 & 1) {
+  			  decompressed_str[pos] = alpha[1]; pos--;
+        }else{
+  			  decompressed_str[pos] = alpha[0]; pos--;
+  		  }
+  		  compressed_data2 >>= 1;
+      }
+    }
+  }
+}
+
 void add0bit(unsigned long *compressed_data, int data_stream[100], int a){
   *compressed_data <<= 1;
   data_stream[a + 1] = 0;
@@ -221,19 +245,7 @@ int main() {                                  //***********OPTIMIZED
 	for (i = 0; i < str_length; i++) {
 		printf("\nLetter: %c\n", str[i]);
 		for (j = 0; j <= number_of_letters; j++) {
-      if (number_of_letters == 1) {
-        if (str[i] == alpha[j]) {
-					bit_to_add = codes[j];
-					compressed_data <<= 1;
-          if(!safe_add(compressed_data)){
-            compressed_data2 = compressed_data;
-            compressed_data = 1;
-          }
-          add0bit(&compressed_data, data_stream, index);
-          index++;
-        }
 
-      }
 			if (number_of_letters == 2) {
 				if (str[i] == alpha[j]) {
 					//while (1);
@@ -470,25 +482,24 @@ int main() {                                  //***********OPTIMIZED
   //Changed unsigned char decompressed_str[200] = { }; to the following...
   unsigned char* decompressed_str;                      //***********OPTIMIZED
   decompressed_str = (unsigned char*)malloc((str_length + 1) * sizeof(unsigned char));
-  decompressed_str[str_length] = '\0';
   int pos = str_length - 1;
-  if (number_of_letters == 1){
-    for (i = 0; i < str_length; i++) {
-      decompressed_str[pos] = alpha[0]; pos--;
-      compressed_data >>= 1;
-      if((compressed_data==1) && (compressed_data2>0)){
-        for (i = 0; i < str_length; i++) {
-          decompressed_str[pos] = alpha[0]; pos--;
-          compressed_data2 >>= 1;
-        }
-      }
-    }
+  if(number_of_letters == 2){
+    decompress2(str_length, decompressed_str, compressed_data, compressed_data2, alpha);
   }
-  else if (number_of_letters == 2) {
+
+
+  /*if (number_of_letters == 2) {
+	  printf("Data to Decompress: %d\n", compressed_data);
 	  for (i = 0; i < str_length; i++) {
 		  if (compressed_data & 1) {
+			  printf("Data remaining.... %d\n", compressed_data);
+			  //compressed_data >>= 1;
+			  printf("Data remaining after shifting.... %d\n", compressed_data);
 			  decompressed_str[pos] = alpha[1]; pos--;
-		  } else {
+
+		  }
+		  else
+		  {
 			  decompressed_str[pos] = alpha[0]; pos--;
 		  }
 		  compressed_data >>= 1;
@@ -497,14 +508,16 @@ int main() {                                  //***********OPTIMIZED
     		  if (compressed_data2 & 1) {
     			  decompressed_str[pos] = alpha[1]; pos--;
 
-    		  } else {
+    		  }
+    		  else
+    		  {
     			  decompressed_str[pos] = alpha[0]; pos--;
     		  }
     		  compressed_data2 >>= 1;
         }
       }
     }
-  }
+  }*/
 
   if (number_of_letters == 3) {
 	  for (i = 0; i < str_length; i++) {
