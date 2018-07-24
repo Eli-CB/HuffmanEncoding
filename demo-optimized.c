@@ -136,15 +136,23 @@ void optimal_encoding(int codes[26], int number_of_letters){
   		codes[3] = 0b010;
   		codes[4] = 0b110;
   		break;
+    case 6:
+      codes[0] = 0b01;
+      codes[1] = 0b000;
+      codes[2] = 0b010;
+      codes[3] = 0b100;
+      codes[4] = 0b011;
+      codes[5] = 0b111;
+      break;
     default:
-        codes[0] = 0b010;
+      codes[0] = 0b010;
   		codes[1] = 0b0111;
   		codes[2] = 0b0110;
   		codes[3] = 0b0011;
   		codes[4] = 0b0001;
   		codes[5] = 0b1001;
   		codes[6] = 0b0000;
-		codes[7] = 0b0101;
+		  codes[7] = 0b0101;
   		codes[8] = 0b01000;
   		codes[9] = 0b11000;
   		codes[10] = 0b01011;
@@ -223,7 +231,7 @@ int main() {                                  //***********OPTIMIZED
     printf("Enter the alphabet letters to encode: ");
     scanf("%s", str);
 	}while(!checkValid(&str));
-  
+
 	getFrequency(str, sorted_freq);
 
 	int unsorted_letterFreq[26] = { 0 };
@@ -508,10 +516,10 @@ int main() {                                  //***********OPTIMIZED
 
 				}
 			}
-			
-			
+
+
 		/** 5 or more different letters **/
-			
+
 		 else if (number_of_letters > 5) {
 				if (str[i] == alpha[j]) {
 					//while (1);
@@ -1481,7 +1489,7 @@ int main() {                                  //***********OPTIMIZED
             index++;
 					}
 				}
-			}			
+			}
 		}
 	}
   printf("\nCompressed Data: %d" , compressed_data + compressed_data2);
