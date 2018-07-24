@@ -113,32 +113,26 @@ void optimal_encoding(int codes[26], int number_of_letters){
   }
 
 }
-//void compress(char *codes[26], char alpha[]){
 
-
-//}
-bool safe_add(unsigned long compressed_data) {
-  printf("compressed_data = %lu\n", compressed_data);
-  //printf("%d: b\n", b);
-  //printf("half_int_max - a = %d\n", half_int_max-a);
+bool safe_add(unsigned int compressed_data) {
+  printf("compressed_data = %d\n", compressed_data);
   int half_int_max = INT_MAX/2;
   int result = half_int_max - compressed_data;
 
   if (result < 0) {
-    //why does ULONG_LONG_MAX not work!?!??!
     printf("************HANDLE OVERFLOW************\n");
     return false;
   }
   return true;
 }
 
-void add0bit(unsigned long *compressed_data, int data_stream[100], int a){
+void add0bit(unsigned int *compressed_data, int data_stream[100], int a){
   *compressed_data <<= 1;
   data_stream[a + 1] = 0;
   printf("Added Bit 0 to data stream!!\n");
 }
 
-void add1bit(unsigned long *compressed_data, int data_stream[100], int a){
+void add1bit(unsigned int *compressed_data, int data_stream[100], int a){
   *compressed_data <<= 1;
   *compressed_data += 1;
   data_stream[a + 1] = 1;
@@ -151,15 +145,11 @@ int main() {                                  //***********OPTIMIZED
 	char* str;
 	str = (char*)malloc(65 * sizeof(char));     //***********OPTIMIZED
 	int i, j, k = 0;
-	unsigned long compressed_data = 0;
-
-
+	unsigned int compressed_data = 0;           //***********OPTIMIZED
+                                              //unsigned long int not supported by 32 bit system
 
 	printf("Enter the alphabet letters to encode: ");
 	scanf("%s", str); //Replaced gets function with a scanf function
-
-
-
 
 	getFrequency(str, sorted_freq);
 
@@ -215,7 +205,7 @@ int main() {                                  //***********OPTIMIZED
 	int data_stream[100] = { 0 };
 	index++;
 	compressed_data = 1;
-  unsigned long compressed_data2 = 0;
+  unsigned int compressed_data2 = 0;
 	printf("\nStart Bit '1' is added to the data stream\n");
 	data_stream[0] = compressed_data;
 	for (i = 0; i < str_length; i++) {
@@ -447,7 +437,7 @@ int main() {                                  //***********OPTIMIZED
 			}
 		}
 	}
-  printf("\nCompressed Data: %lu" , compressed_data + compressed_data2);
+  printf("\nCompressed Data: %d" , compressed_data + compressed_data2);
   printf("\nCompressed Data Binary: ");
   for (i = 0; i < index + 1; i++) {
 	  printf("%d", data_stream[i]);
@@ -459,194 +449,195 @@ int main() {                                  //***********OPTIMIZED
   int input = 0;
   while (flag) {
 	  printf("Press '1' to Decompress...\n");
-
 	  scanf("%d", &input);
-
 	  if (input == 1) {
 		  flag = 0;
 	  }
-
   }
   //Changed unsigned char decompressed_str[200] = { }; to the following...
   unsigned char* decompressed_str;                      //***********OPTIMIZED
   decompressed_str = (unsigned char*)malloc((str_length + 1) * sizeof(unsigned char));
   decompressed_str[str_length] = '\0';
   int pos = str_length - 1;
-  if (number_of_letters == 1){
-    for (i = 0; i < str_length; i++) {
-      decompressed_str[pos] = alpha[0]; pos--;
-      compressed_data >>= 1;
-      if((compressed_data==1) && (compressed_data2>0)){
-        for (i = 0; i < str_length; i++) {
+  switch (number_of_letters){                           //***********OPTIMIZED
+    case 1 :                                            //Switch statements faster than if else
+      for (i = 0; i < str_length; i++) {
+        decompressed_str[pos] = alpha[0]; pos--;
+        compressed_data >>= 1;
+        if((compressed_data==1) && (compressed_data2>0)){
+          for (i = 0; i < str_length; i++) {
+            decompressed_str[pos] = alpha[0]; pos--;
+            compressed_data2 >>= 1;
+          }
+        }
+      }
+      break;
+    case 2 :
+      for (i = 0; i < str_length; i++) {
+        if (compressed_data & 1) {
+          decompressed_str[pos] = alpha[1]; pos--;
+        } else {
           decompressed_str[pos] = alpha[0]; pos--;
-          compressed_data2 >>= 1;
         }
-      }
-    }
-  }
-  else if (number_of_letters == 2) {
-	  for (i = 0; i < str_length; i++) {
-		  if (compressed_data & 1) {
-			  decompressed_str[pos] = alpha[1]; pos--;
-		  } else {
-			  decompressed_str[pos] = alpha[0]; pos--;
-		  }
-		  compressed_data >>= 1;
-      if((compressed_data==1) && (compressed_data2>0)){
-        for (i = 0; i < str_length; i++) {
-    		  if (compressed_data2 & 1) {
-    			  decompressed_str[pos] = alpha[1]; pos--;
-
-    		  } else {
-    			  decompressed_str[pos] = alpha[0]; pos--;
-    		  }
-    		  compressed_data2 >>= 1;
-        }
-      }
-    }
-  }
-
-  if (number_of_letters == 3) {
-	  for (i = 0; i < str_length; i++) {
-		  if (compressed_data & 1) {
-			  compressed_data >>= 1;
-			  if (compressed_data & 1) {
-				  decompressed_str[pos] = alpha[2]; pos--;
-			  }
-			  else {
-				  decompressed_str[pos] = alpha[1]; pos--;
-			  }
-		  }
-		  else
-		  {
-			  decompressed_str[pos] = alpha[0]; pos--;
-		  }
-		  compressed_data >>= 1;
-      if((compressed_data==1) && (compressed_data2>0)){
-        for (i = 0; i < str_length; i++) {
-    		  if (compressed_data2 & 1) {
-    			  compressed_data2 >>= 1;
-    			  if (compressed_data2 & 1) {
-    				  decompressed_str[pos] = alpha[2]; pos--;
-    			  }
-    			  else {
-    				  decompressed_str[pos] = alpha[1]; pos--;
-    			  }
-    		  }
-    		  else
-    		  {
-    			  decompressed_str[pos] = alpha[0]; pos--;
-    		  }
-    		  compressed_data2 >>= 1;
-        }
-      }
-	  }
-  }
-
-  else if (number_of_letters == 4) {
-	  for (i = 0; i < str_length; i++) {
-		  if (compressed_data & 1) {
-			  compressed_data >>= 1;
-			  if (compressed_data & 1) {
-				  decompressed_str[pos] = alpha[3]; pos--;
-			  }
-			  else {
-				  decompressed_str[pos] = alpha[1]; pos--;
-			  }
-		  }
-		  else
-		  {
         compressed_data >>= 1;
-        if (compressed_data & 1){
-          decompressed_str[pos] = alpha[2]; pos--;
-        }
-        else {
-			    decompressed_str[pos] = alpha[0]; pos--;
-        }
-		  }
-		  compressed_data >>= 1;
-      if((compressed_data==1) && (compressed_data2>0)){
-        for (i = 0; i < str_length; i++) {
-    		  if (compressed_data2 & 1) {
-    			  compressed_data2 >>= 1;
-    			  if (compressed_data2 & 1) {
-    				  decompressed_str[pos] = alpha[3]; pos--;
-    			  } else {
-    				  decompressed_str[pos] = alpha[1]; pos--;
-    			  }
-    		  } else {
-            compressed_data2 >>= 1;
-            if (compressed_data2 & 1){
-              decompressed_str[pos] = alpha[2]; pos--;
-            } else {
-    			    decompressed_str[pos] = alpha[0]; pos--;
-            }
-    		  }
-          compressed_data2 >>= 1;
-        }
-      }
-    }
-  }
-  else if (number_of_letters == 5) {
-	  for (i = 0; i < str_length; i++) {
-		  if (compressed_data & 1) {
-			  compressed_data >>= 1;
-			  if (compressed_data & 1) {
-				  decompressed_str[pos] = alpha[2]; pos--;
-			  }
-			  else {
-				  decompressed_str[pos] = alpha[1]; pos--;
-			  }
-		  }
-		  else
-		  {
-        compressed_data >>= 1;
-        if (compressed_data & 1){
-          compressed_data >>= 1;
-          if(compressed_data & 1){
-            decompressed_str[pos] = alpha[4]; pos--;
-          }
-          else {
-            decompressed_str[pos] = alpha[3]; pos--;
-          }
-        }
-        else {
-			    decompressed_str[pos] = alpha[0]; pos--;
-        }
-		  }
-		  compressed_data >>= 1;
-      if((compressed_data==1) && (compressed_data2>0)){
-        for (i = 0; i < str_length; i++) {
-          if (compressed_data2 & 1) {
-            compressed_data2 >>= 1;
+        if((compressed_data==1) && (compressed_data2>0)){
+          for (i = 0; i < str_length; i++) {
             if (compressed_data2 & 1) {
-              decompressed_str[pos] = alpha[2]; pos--;
-            }
-            else {
               decompressed_str[pos] = alpha[1]; pos--;
-            }
-          }
-          else
-          {
-            compressed_data2 >>= 1;
-            if (compressed_data2 & 1){
-              compressed_data2 >>= 1;
-              if(compressed_data2 & 1){
-                decompressed_str[pos] = alpha[4]; pos--;
-              }
-              else {
-                decompressed_str[pos] = alpha[3]; pos--;
-              }
-            }
-            else {
+
+            } else {
               decompressed_str[pos] = alpha[0]; pos--;
             }
+            compressed_data2 >>= 1;
           }
-          compressed_data2 >>= 1;
         }
       }
-	  }
+      break;
+    case 3 :
+      for (i = 0; i < str_length; i++) {
+        if (compressed_data & 1) {
+          compressed_data >>= 1;
+          if (compressed_data & 1) {
+            decompressed_str[pos] = alpha[2]; pos--;
+          }
+          else {
+            decompressed_str[pos] = alpha[1]; pos--;
+          }
+        }
+        else
+        {
+          decompressed_str[pos] = alpha[0]; pos--;
+        }
+        compressed_data >>= 1;
+        if((compressed_data==1) && (compressed_data2>0)){
+          for (i = 0; i < str_length; i++) {
+            if (compressed_data2 & 1) {
+              compressed_data2 >>= 1;
+              if (compressed_data2 & 1) {
+                decompressed_str[pos] = alpha[2]; pos--;
+              }
+              else {
+                decompressed_str[pos] = alpha[1]; pos--;
+              }
+            }
+            else
+            {
+              decompressed_str[pos] = alpha[0]; pos--;
+            }
+            compressed_data2 >>= 1;
+          }
+        }
+      }
+      break;
+
+    case 4 :
+      for (i = 0; i < str_length; i++) {
+        if (compressed_data & 1) {
+          compressed_data >>= 1;
+          if (compressed_data & 1) {
+            decompressed_str[pos] = alpha[3]; pos--;
+          }
+          else {
+            decompressed_str[pos] = alpha[1]; pos--;
+          }
+        }
+        else
+        {
+          compressed_data >>= 1;
+          if (compressed_data & 1){
+            decompressed_str[pos] = alpha[2]; pos--;
+          }
+          else {
+            decompressed_str[pos] = alpha[0]; pos--;
+          }
+        }
+        compressed_data >>= 1;
+        if((compressed_data==1) && (compressed_data2>0)){
+          for (i = 0; i < str_length; i++) {
+            if (compressed_data2 & 1) {
+              compressed_data2 >>= 1;
+              if (compressed_data2 & 1) {
+                decompressed_str[pos] = alpha[3]; pos--;
+              } else {
+                decompressed_str[pos] = alpha[1]; pos--;
+              }
+            } else {
+              compressed_data2 >>= 1;
+              if (compressed_data2 & 1){
+                decompressed_str[pos] = alpha[2]; pos--;
+              } else {
+                decompressed_str[pos] = alpha[0]; pos--;
+              }
+            }
+            compressed_data2 >>= 1;
+          }
+        }
+      }
+      break;
+    case 5 :
+      for (i = 0; i < str_length; i++) {
+        if (compressed_data & 1) {
+          compressed_data >>= 1;
+          if (compressed_data & 1) {
+            decompressed_str[pos] = alpha[2]; pos--;
+          }
+          else {
+            decompressed_str[pos] = alpha[1]; pos--;
+          }
+        }
+        else
+        {
+          compressed_data >>= 1;
+          if (compressed_data & 1){
+            compressed_data >>= 1;
+            if(compressed_data & 1){
+              decompressed_str[pos] = alpha[4]; pos--;
+            }
+            else {
+              decompressed_str[pos] = alpha[3]; pos--;
+            }
+          }
+          else {
+            decompressed_str[pos] = alpha[0]; pos--;
+          }
+        }
+        compressed_data >>= 1;
+        if((compressed_data==1) && (compressed_data2>0)){
+          for (i = 0; i < str_length; i++) {
+            if (compressed_data2 & 1) {
+              compressed_data2 >>= 1;
+              if (compressed_data2 & 1) {
+                decompressed_str[pos] = alpha[2]; pos--;
+              }
+              else {
+                decompressed_str[pos] = alpha[1]; pos--;
+              }
+            }
+            else
+            {
+              compressed_data2 >>= 1;
+              if (compressed_data2 & 1){
+                compressed_data2 >>= 1;
+                if(compressed_data2 & 1){
+                  decompressed_str[pos] = alpha[4]; pos--;
+                }
+                else {
+                  decompressed_str[pos] = alpha[3]; pos--;
+                }
+              }
+              else {
+                decompressed_str[pos] = alpha[0]; pos--;
+              }
+            }
+            compressed_data2 >>= 1;
+          }
+        }
+      }
+      break;
+    default:
+      break;
   }
+
   printf("\nOriginal String:	%s	Length: %d	Original Size: %d bits		Compressed Size: %d bits\n", str, str_length, str_length*8, index);
   printf("Decompressed String:	%s\n", decompressed_str);
   //free memory...

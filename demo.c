@@ -116,13 +116,10 @@ void optimal_encoding(int codes[26], int number_of_letters){
 //}
 bool safe_add(unsigned long compressed_data) {
   printf("compressed_data = %lu\n", compressed_data);
-  //printf("%d: b\n", b);
-  //printf("half_int_max - a = %d\n", half_int_max-a);
   int half_int_max = INT_MAX/2;
   int result = half_int_max - compressed_data;
 
   if (result < 0) {
-    //why does ULONG_LONG_MAX not work!?!??!
     printf("************HANDLE OVERFLOW************\n");
     return false;
   }
@@ -238,7 +235,6 @@ int main(int argc, char *argv[]) {
       if (number_of_letters == 1) {
         if (str[i] == alpha[j]) {
 					bit_to_add = codes[j];
-					compressed_data <<= 1;
           if(!safe_add(compressed_data)){
             compressed_data2 = compressed_data;
             compressed_data = 1;
@@ -253,7 +249,6 @@ int main(int argc, char *argv[]) {
 					//while (1);
 					bit_to_add = codes[j];
 					compressed_data <<= 1;
-          //***figure out how to handle overflow***
           if(!safe_add(compressed_data)){
             compressed_data2 = compressed_data;
             compressed_data = 1;
