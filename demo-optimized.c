@@ -169,9 +169,7 @@ void optimal_encoding(int codes[26], int number_of_letters) {
 }
 
 bool safe_add(unsigned int compressed_data, int bit) {
-    printf("compressed_data = %d\n", compressed_data);
-    //int half_int_max = INT_MAX/2;
-    //int result = half_int_max - compressed_data;
+  printf("compressed_data = %d\n", compressed_data);
 	int remaining_spaces = INT_MAX - compressed_data;
     if (remaining_spaces <= INT_MAX>>bit) {
         printf("\n************HANDLE OVERFLOW************\n");
@@ -212,26 +210,29 @@ bool checkValid(char **input) {
 }
 
 int main() {                                  //***********OPTIMIZED
-    int sorted_freq[26] = { 0 };
-    // Change from char str[200] to char* str
-    char* str;
-    str = (char*)malloc(1024);     //***********OPTIMIZED
-	int* buffer;							    //***********Added for Overflow Testing
-	buffer = (int*)malloc(1024);                  //***********Added for Overflow Testing
-	int* splitted_str_data;							    //***********Added for Overflow Testing
-	splitted_str_data = (int*)malloc(1024);                  //***********Added for Overflow Testing
+  int sorted_freq[26] = { 0 };
+  // Change from char str[200] to char* str
+  //char* str;
+  char* str = (char*)malloc(1024);                  //***********OPTIMIZED
+  if(str == NULL) {                           //ELI ** OPT
+    printf("Memory allocation failed");
+    return 0;
+  }
+  //int* buffer;							                  //***********Added for Overflow Testing
+	int* buffer = (int*)malloc(1024);                //***********Added for Overflow Testing
+	//int* splitted_str_data;							        //***********Added for Overflow Testing
+	int* splitted_str_data = (int*)malloc(1024);     //***********Added for Overflow Testing
 
-    int i, j, k = 0;
+  int i, j, k = 0;
 	int buffer_index = 0;
 	int str_index = 0;
-	int compressed_data = 0;           //***********OPTIMIZED
-	printf("\nTEST: %d\n", compressed_data);
-	
+	int compressed_data = 1;           //***********OPTIMIZED
+
     //unsigned long int not supported by 32 bit system
 
     do {
         printf("Enter the alphabet letters to encode: ");
-		
+
         scanf("%s", str);
     } while(!checkValid(&str));
 
@@ -286,10 +287,9 @@ int main() {                                  //***********OPTIMIZED
     optimal_encoding(codes, number_of_letters);
 
     int bit_to_add = 0;
-    int index = 0;
+    int index = 1;
     int data_stream[100] = { 0 };
-    index++;
-    compressed_data = 1;
+    //compressed_data = 1;
     unsigned int compressed_data2 = 0;
     printf("\nStart Bit '1' is added to the data stream\n");
     data_stream[0] = compressed_data;
@@ -315,7 +315,7 @@ int main() {                                  //***********OPTIMIZED
                 if (str[i] == alpha[j]) {
                     //while (1);
                     bit_to_add = codes[j];
-                    
+
                     //***figure out how to handle overflow***
                     if(!safe_add(compressed_data, 1)) {
 						//while (1);
@@ -344,7 +344,7 @@ int main() {                                  //***********OPTIMIZED
 						}
 						printf("Added Bit %d to data stream!!\n", bit_to_add);
 					}
-                   
+
                 }
             }
 			else if (number_of_letters == 3) {
@@ -406,11 +406,11 @@ int main() {                                  //***********OPTIMIZED
 							printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
 						}
 					}
-					
+
 				}
 			}
 
-            
+
 			/*
             else if (number_of_letters == 4) {
                 if (str[i] == alpha[j]) {
@@ -1540,7 +1540,7 @@ int main() {                                  //***********OPTIMIZED
             }*/
         }
     }
-	
+
     printf("\nCompressed Data: %d" , compressed_data + compressed_data2);
     printf("\nCompressed Data Binary: ");
     for (i = 0; i < index; i++) {
@@ -1561,9 +1561,12 @@ int main() {                                  //***********OPTIMIZED
     //Changed unsigned char decompressed_str[200] = { }; to the following...
     char* decompressed_str;                      //***********OPTIMIZED
     decompressed_str = (char*)malloc(1024);
-    //decompressed_str[str_length] = '\0';
+    if(decompressed_str == NULL) {                        //ELI ** OPT
+      printf("Memory allocation failed");
+      return 0;
+    }
     int pos = strlen(str) - 1;								//changed
-	int nodes = buffer_index;
+	  int nodes = buffer_index;
     switch (number_of_letters) {                          //***********OPTIMIZED
     case 1 :                                            //Switch statements faster than if else
         for (i = 0; i < str_length; i++) {
@@ -1588,7 +1591,7 @@ int main() {                                  //***********OPTIMIZED
 				if (compressed_data & 1) {
 					decompressed_str[pos] = alpha[1];
 					pos--;
-					
+
 
 				}
 				else {
@@ -1760,6 +1763,88 @@ int main() {                                  //***********OPTIMIZED
         }
         break;
     default:
+        for (i = 0; i < str_length; i++) {
+          if (compressed_data & 1) {                    //1
+            compressed_data >>= 1;
+
+            if (compressed_data & 1) {                  //11
+              compressed_data >>= 1;
+
+              if (compressed_data & 1) {                //111
+                compressed_data >>= 1;
+
+                if (compressed_data & 1) {              //1111
+                  compressed_data >>= 1;
+
+                  if (compressed_data & 1) {            //11111
+                    compressed_data >>= 1;
+
+                    if (compressed_data & 1) {          //111111
+                      compressed_data >>= 1;
+                      decompressed_str[pos] = alpha[18]; pos--;
+
+                    }else{                              //111110
+                      compressed_data >>= 1;
+                      decompressed_str[pos] = alpha[17]; pos--;
+                    }
+                  }else{                                 //11110
+                    compressed_data >>= 1;
+
+                  }
+                }else{                                   //1110
+                  compressed_data >>= 1;
+
+                }
+              }else{
+                compressed_data >>= 1;
+
+              }
+            }else{
+              compressed_data >>= 1;
+
+            }
+          }else{                                          //0
+            compressed_data >>= 1;
+            if (compressed_data & 1) {                    //01
+              compressed_data >>= 1;
+
+              if (compressed_data & 1) {                  //011
+                compressed_data >>= 1;
+
+                if (compressed_data & 1) {                //0111
+                  compressed_data >>= 1;
+
+                  if (compressed_data & 1) {              //01111
+                    compressed_data >>= 1;
+
+                    if (compressed_data & 1) {            //011111
+                      compressed_data >>= 1;
+
+                    }else{                                //011110
+                      compressed_data >>= 1;
+                      decompressed_str[pos] = alpha[16]; pos--;
+                    }
+                  }else{                                  //01110
+                    compressed_data >>= 1;
+
+                  }
+                }else{                                     //0110
+                  compressed_data >>= 1;
+                  decompressed_str[pos] = alpha[3]; pos--;
+
+                }
+              }else{                                        //010
+                compressed_data >>= 1;
+                decompressed_str[pos] = alpha[1]; pos--;
+              }
+            }else{                                          //00
+              compressed_data >>= 1;
+              if (compressed_data & 1){                     //001
+                decompressed_str[pos] = alpha[0]; pos--;
+              }
+            }
+          }
+        }
         break;
     }
 
