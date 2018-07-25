@@ -1871,6 +1871,10 @@ int main() {                                  //***********OPTIMIZED
     //free memory...
     str = NULL;
     decompressed_str = NULL;
+    buffer = NULL;
+    splitted_str_data = NULL;
+    free(splitted_str_data);
+    free(buffer);
     free(str);
     free(decompressed_str);
 
