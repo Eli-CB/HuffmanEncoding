@@ -137,32 +137,33 @@ void optimal_encoding(int codes[26], int number_of_letters) {
         codes[4] = 0b110;
         break;
     default:
-        codes[0] = 0b010;
-        codes[1] = 0b0111;
-        codes[2] = 0b0110;
-        codes[3] = 0b0011;
-        codes[4] = 0b0001;
-        codes[5] = 0b1001;
-        codes[6] = 0b0000;
-        codes[7] = 0b0101;
-        codes[8] = 0b01000;
-        codes[9] = 0b11000;
-        codes[10] = 0b01011;
-        codes[11] = 0b11101;
-        codes[12] = 0b01111;
-        codes[13] = 0b01101;
-        codes[14] = 0b11011;
-        codes[15] = 0b011110;
-        codes[16] = 0b111110;
-        codes[17] = 0b111111;
-        codes[18] = 0b101110;
-        codes[19] = 0b1001110;
-        codes[20] = 0b0001110;
-        codes[21] = 0b1011111;
-        codes[22] = 0b000011111;
-        codes[23] = 0b1100011111;
-        codes[24] = 0b10100011111;
-        codes[25] = 0b00100011111;
+        codes[0] = 0b001;
+		codes[1] = 0b101;
+        codes[2] = 0b1100;
+        codes[3] = 0b0111;
+        codes[4] = 0b1010;
+        codes[5] = 0b1110;
+        codes[6] = 0b0010;
+		codes[7] = 0b1011;
+        codes[8] = 0b0011;
+        codes[9] = 0b1000;
+        codes[10] = 0b01111;
+		codes[11] = 0b11111;
+        codes[12] = 0b00100;
+        codes[13] = 0b10100;
+        codes[14] = 0b010000;
+        codes[15] = 0b100110;
+        codes[16] = 0b100000;
+        codes[17] = 0b000110;
+		codes[18] = 0b000000;
+		codes[19] = 0b110110;
+        codes[20] = 0b110000;
+		codes[21] = 0b0010110;
+        codes[22] = 0b011010110;
+		codes[23] = 0b101010110;
+        codes[24] = 0b111010110;
+		codes[25] = 0b0001010110;
+	
         break;
 
     }
@@ -219,9 +220,17 @@ int main() {                                  //***********OPTIMIZED
     return 0;
   }
   //int* buffer;							                  //***********Added for Overflow Testing
-	unsigned int* buffer = (int*)malloc(INT_MAX);                //***********Added for Overflow Testing
+        int* buffer = (int*)malloc(1024); 
+	if(buffer == NULL) {                           //ELI ** OPT
+    printf("Memory allocation failed");
+    return 0;
+  }		//***********Added for Overflow Testing
 	//int* splitted_str_data;							        //***********Added for Overflow Testing
-	int* splitted_str_data = (int*)malloc(INT_MAX);     //***********Added for Overflow Testing
+	int* splitted_str_data = (int*)malloc(1024);     //***********Added for Overflow Testing
+	 if(splitted_str_data == NULL) {                           //ELI ** OPT
+    printf("Memory allocation failed");
+    return 0;
+  }
 	//126 bits: asasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaassssa
 	//127 bits: asasassasaasasassasaasasassasaasasasssasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaassssa
 	//sdasfasdfasdfsadasasdafasdfasdfsadfsdfsddsdsasdasdfasdfsdafsdfasdfas
@@ -297,7 +306,7 @@ int main() {                                  //***********OPTIMIZED
 		return 0;
 	}
 	data_stream[strlen(str)*number_of_letters] = '\0';
-    //int data_stream[300] = { 0 };
+   //int data_stream[100] = { 0 };
     //compressed_data = 1;
     printf("\nStart Bit '1' is added to the data stream\n");
     data_stream[0] = compressed_data;
@@ -646,9 +655,9 @@ int main() {                                  //***********OPTIMIZED
 
                 }
             }
-/*
 
-/*
+
+
             else if (number_of_letters > 5) {
                 if (str[i] == alpha[j]) {
                     //while (1);
@@ -1806,10 +1815,12 @@ int main() {                                  //***********OPTIMIZED
     decompressed_str = NULL;
     buffer = NULL;
     splitted_str_data = NULL;
+    data_stream = NULL;
     free(splitted_str_data);
     free(buffer);
     free(str);
     free(decompressed_str);
+    free(data_stream);
 
     //***********OPTIMIZED
 
