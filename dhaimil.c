@@ -1539,17 +1539,17 @@ for (i = 0; i < buffer_index + 1; i++) {
                     else {	// 0111
                         decompressed_str[pos] = alpha[3];
                         pos--;
-						continue;
+						break;
                     }
                     if (compressed_data & 1) { // 11111
                         decompressed_str[pos] = alpha[11];
                         pos--;
-						continue;
+						break;
                     }
                     else { // 01111
                         decompressed_str[pos] = alpha[10];
                         pos--;
-						continue;
+						break;
                     }
                 }
                 else { // 011
@@ -1557,12 +1557,12 @@ for (i = 0; i < buffer_index + 1; i++) {
                     if (compressed_data & 1) { // 1011
                         decompressed_str[pos] = alpha[7];
                         pos--;
-						continue;
+						break;
                     }
                     else { // 0011
                         decompressed_str[pos] = alpha[8];
                         pos--;
-						continue;
+						break;
                     }
                 }
             } // CORRECT UP TO HERE
@@ -1571,12 +1571,12 @@ for (i = 0; i < buffer_index + 1; i++) {
                 if (compressed_data & 1) { // 101
                     decompressed_str[pos] = alpha[1];
                     pos--;
-					continue;
+					break;
                 }
                 else { // 001
                     decompressed_str[pos] = alpha[0];
                     pos--;
-					continue;
+					break;
                 }
 
 
@@ -1592,7 +1592,7 @@ for (i = 0; i < buffer_index + 1; i++) {
                     if (compressed_data & 1) { // 1110
                         decompressed_str[pos] = alpha[5];
                         pos--;
-						continue;
+						break;
                     } else { // 0110
                         compressed_data >>= 1;
                         if (compressed_data & 1) { // 10110
@@ -1600,7 +1600,7 @@ for (i = 0; i < buffer_index + 1; i++) {
                             if (compressed_data & 1) { // 110110
                                 decompressed_str[pos] = alpha[19];
                                 pos--;
-								continue;
+								break;
                             } else { // 010110
                                 compressed_data >>= 1;
                                 if (compressed_data & 1) { // 1010110
@@ -1612,7 +1612,7 @@ for (i = 0; i < buffer_index + 1; i++) {
                                         if (compressed_data & 1) { // 101010110
                                             decompressed_str[pos] = alpha[23];
                                             pos--;
-											continue;
+											break;
                                         } else { // 001010110
                                             compressed_data >>= 1;
                                             if (compressed_data & 1) { // 1001010110
@@ -1620,23 +1620,23 @@ for (i = 0; i < buffer_index + 1; i++) {
                                             } else { // 0001010110
                                                 decompressed_str[pos] = alpha[25];
                                                 pos--;
-												continue;
+												break;
                                             }
                                         }
                                     }
                                     if (compressed_data & 1) { // 111010110
                                         decompressed_str[pos] = alpha[24];
                                         pos--;
-										continue;
+										break;
                                     } else { // 011010110
                                         decompressed_str[pos] = alpha[22];
                                         pos--;
-										continue;
+										break;
                                     }
                                 } else { // 0010110
                                     decompressed_str[pos] = alpha[21];
                                     pos--;
-									continue;
+									break;
                                 }
                             }
                         } else { // 00110
@@ -1644,11 +1644,11 @@ for (i = 0; i < buffer_index + 1; i++) {
                             if (compressed_data & 1) { // 100110
                                 decompressed_str[pos] = alpha[15];
                                 pos--;
-								continue;
+								break;
                             } else { // 000110
                                 decompressed_str[pos] = alpha[17];
                                 pos--;
-								continue;
+								break;
                             }
                         }
 
@@ -1659,12 +1659,12 @@ for (i = 0; i < buffer_index + 1; i++) {
                     if (compressed_data & 1) { // 1010
                         decompressed_str[pos] = alpha[4];
                         pos--;
-						continue;
+						break;
                     }
                     else { // 0010
                         decompressed_str[pos] = alpha[6];
                         pos--;
-						continue;
+						break;
                     }
                 }
             }
@@ -1675,18 +1675,18 @@ for (i = 0; i < buffer_index + 1; i++) {
                     if (compressed_data & 1) { // 1100
                         decompressed_str[pos] = alpha[2];
                         pos--;
-						continue;
+						break;
                     } else { // 0100
                         compressed_data >>= 1;
                         if (compressed_data & 1) { // 10100
                             decompressed_str[pos] = alpha[13];
                             pos--;
-							continue;
+							break;
                         }
                         else { // 00100
                             decompressed_str[pos] = alpha[12];
                             pos--;
-							continue;
+							break;
                         }
                     }
 
@@ -1696,7 +1696,7 @@ for (i = 0; i < buffer_index + 1; i++) {
                     if (compressed_data & 1) { // 1000
                         decompressed_str[pos] = alpha[9];
                         pos--;
-						continue;
+						break;
                     } else { // 0000
                         compressed_data >>= 1;
                         if (compressed_data & 1) { // 10000
@@ -1704,22 +1704,22 @@ for (i = 0; i < buffer_index + 1; i++) {
                             if (compressed_data & 1) { // 110000
                                 decompressed_str[pos] = alpha[20];
                                 pos--;
-								continue;
+								break;
                             } else { // 010000
                                 decompressed_str[pos] = alpha[14];
                                 pos--;
-								continue;
+								break;
                             }
                         } else { // 00000
                             compressed_data >>= 1;
                             if (compressed_data & 1) { // 100000
                                 decompressed_str[pos] = alpha[16];
                                 pos--;
-								continue;
+								break;
                             } else { // 000000
                                 decompressed_str[pos] = alpha[18];
                                 pos--;
-								continue;
+								break;
                             }
                         }
                     }
