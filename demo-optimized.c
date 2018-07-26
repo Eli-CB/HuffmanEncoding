@@ -308,8 +308,8 @@ int main() {
     //printf("\nStart Bit '1' is added to the data stream\n");
     data_stream[0] = compressed_data;
 
-	for (i = 0; i < str_length; i++) {
-		if (!safe_add(compressed_data, bits_for_safe_shifting)) {
+		for (i = 0; i < str_length; i++) {
+		if (!safe_add(compressed_data, 10)) {
 			//while (1);
 			i--;
 			buffer[buffer_index] = compressed_data;
@@ -323,7 +323,8 @@ int main() {
 		else {
 			//printf("\nLetter: %c\n", str[i]);
 			for (j = 0; j < number_of_letters; j++) {
-				if (number_of_letters == 1) {
+				switch (number_of_letters) {
+				case 1:	 {
 					if (str[i] == alpha[j]) {
 						//bit_to_add = codes[j];					
 						str_index++;
@@ -339,9 +340,9 @@ int main() {
 						//printf("Added Bit %d to data stream!!\n", bit_to_add);
 					
 					}
-
+					break;
 				}
-				else if (number_of_letters == 2) {
+				 case 2: {
 					if (str[i] == alpha[j]) {
 						//while (1);
 						bit_to_add = codes[j];
@@ -361,8 +362,9 @@ int main() {
 
 
 					}
+					break;
 				}
-				else if (number_of_letters == 3) {
+				case 3: {
 					if (str[i] == alpha[j]) {
 						bit_to_add = codes[j];
 						if (bit_to_add == 0b0) {
@@ -405,8 +407,9 @@ int main() {
 							//printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
 						}
 					}
+					break;
 				}
-				else if (number_of_letters == 4) {
+				case 4: {
 					if (str[i] == alpha[j]) {
 						bit_to_add = codes[j];
 						if (bit_to_add == 0b0) {
@@ -470,8 +473,9 @@ int main() {
 							//printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
 						}
 					}
+					break;
 				}
-				else if (number_of_letters == 5) {
+				case 5: {
 					if (str[i] == alpha[j]) {
 						bit_to_add = codes[j];
 						if (bit_to_add == 0b00) {
@@ -551,8 +555,9 @@ int main() {
 							//printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
 						}
 					}
+					break;
 				}
-				else if (number_of_letters > 5) {
+				default: {
 					if (str[i] == alpha[j]) {
 						bit_to_add = codes[j];
 						if (bit_to_add == 0b001) {
@@ -1350,10 +1355,13 @@ int main() {
 							//printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
 						}
 					}
+					break;
 				}
 			}
 		}
+			
 	}
+}
 
     //printf("\nCompressed Data: %d" , compressed_data);
     //printf("\nCompressed Data Binary: ");

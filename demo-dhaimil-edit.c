@@ -8,6 +8,9 @@
 #include <time.h>
 #include <sys/time.h>
 
+char alpha[26] = { 0 };
+char letters[26] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
+
 void insertionSort(int freq[26]) {
     int i,j,a = 0;
     for (i = 0; i < 26; ++i) {
@@ -137,13 +140,11 @@ void optimal_encoding(int codes[26], int number_of_letters){
 bool safe_add(int compressed_data, int bit) {
   //printf("compressed_data = %d\n", compressed_data);
     if (compressed_data >= INT_MAX>>bit) {
-        //printf("\n************HANDLE OVERFLOW************\n");
-		//printf("\nCompressed Number XXXXXXX : %d	INT_MAX: %d	INT_MAX>>bit: %d\n",compressed_data, INT_MAX, INT_MAX >> bit);
         return false;
     }
     return true;
 }
-
+/*
 bool checkValid(char **input) {
     int i;
     bool notValid = true;
@@ -155,28 +156,28 @@ bool checkValid(char **input) {
         }
     }
     return notValid;
-}
+}*/
 
 int main() {                                
 //  clock_t begin = clock();	
   
   int sorted_freq[26] = { 0 };
-  char* str = (char*)malloc(1024); 
+  char str[200]; 
   
-  if(str == NULL) {                           
+ // if(str == NULL) {                           
+ //   //printf("Memory allocation failed");
+ //   return 0;
+ // }
+  int buffer[400]; 
+ // if(buffer == NULL) {                           
     //printf("Memory allocation failed");
-    return 0;
-  }
-  int* buffer = (int*)malloc(1024); 
-  if(buffer == NULL) {                           
-    //printf("Memory allocation failed");
-    return 0;
-  }	
-  int* splitted_str_data = (int*)malloc(1024);     
-  if(splitted_str_data == NULL) {                           
-    //printf("Memory allocation failed");
-    return 0;
-  }
+  //  return 0;
+  //}	
+  int splitted_str_data[200];     
+ // if(splitted_str_data == NULL) {                           
+  //  //printf("Memory allocation failed");
+  //  return 0;
+ // }
 	//126 bits: asasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaassssa
 
   int i, j, k = 0;
@@ -186,11 +187,11 @@ int main() {
 
     //unsigned long int not supported by 32 bit system
 
-    do {
+   // do {
         printf("Enter the alphabet letters to encode: ");
 
         scanf("%s", str);
-    } while(!checkValid(&str));
+  //  } while(!checkValid(&str));
 	struct timeval start, stop;
     gettimeofday(&start, NULL);
     getFrequency(str, sorted_freq);
@@ -207,7 +208,7 @@ int main() {
       //  printf("%d", unsorted_letterFreq[i]);
     }
 
-	int bits_for_safe_shifting = number_of_letters;		//ELISMAJOR
+	/*int bits_for_safe_shifting = number_of_letters;		//ELISMAJOR
 	if (number_of_letters == 1) {
 		bits_for_safe_shifting++;
 	}
@@ -223,7 +224,7 @@ int main() {
 	else {
 		bits_for_safe_shifting = 10;
 	}
-
+*/
     //freq_sorted is now sorted
     insertionSort(sorted_freq);
 
@@ -263,16 +264,16 @@ int main() {
 
     int bit_to_add = 0;
     int index = 1;
-	int* data_stream = (int*)malloc((strlen(str)*bits_for_safe_shifting)+1);
-	if (data_stream == NULL) {                           
-		//printf("Memory allocation failed");
-		return 0;
-	}
+	int data_stream[300];
+//	if (data_stream == NULL) {                           
+	//	//printf("Memory allocation failed");
+	//	return 0;
+//	}
     //printf("\nStart Bit '1' is added to the data stream\n");
     data_stream[0] = compressed_data;
 
 	for (i = 0; i < str_length; i++) {
-		if (!safe_add(compressed_data, bits_for_safe_shifting)) {
+		if (!safe_add(compressed_data, 10)) {
 			//while (1);
 			i--;
 			buffer[buffer_index] = compressed_data;
@@ -1327,7 +1328,7 @@ int main() {
     //printf("\n");
 
     int flag = 1;
-    char *input = (char*)malloc(sizeof(input));
+    char input[300];
 	
 	gettimeofday(&stop, NULL);
 	double diff = stop.tv_usec - start.tv_usec;
@@ -1359,15 +1360,15 @@ int main() {
     struct timeval startDec, stopDec;
 	gettimeofday(&startDec, NULL);
 	
-  char* decompressed_str = (char*)malloc(untouched_strlen+2);
-    if(decompressed_str == NULL) {
-      //printf("Memory allocation failed");
-      return 0;
-    }
+  char decompressed_str[400];
+    //if(decompressed_str == NULL) {
+ //     //printf("Memory allocation failed");
+   //   return 0;
+  //  }
     int pos = untouched_strlen-1;								//changed from untouched_strlen-1
 	int nodes = buffer_index;
-    switch (number_of_letters) {                          //***********OPTIMIZED
-		case 1 :                                            //Switch statements faster than if else
+                         //***********OPTIMIZED
+		if (number_of_letters == 1) {                                           //Switch statements faster than if else
 			for (i = 0; i < buffer_index + 1; i++) {
 				for (j = 0; j < str_length; j++) {
 					decompressed_str[pos] = alpha[0];
@@ -1376,8 +1377,8 @@ int main() {
 				}
 				nodes--;
 			}
-			break;
-		case 2 :
+		}
+		if (number_of_letters == 2) {
 			for (i = 0; i < buffer_index+1; i++) {
 				str_length = splitted_str_data[nodes];
 				compressed_data = buffer[nodes];
@@ -1397,9 +1398,9 @@ int main() {
 				}
 				nodes--;
 			}
-			break;
+	}
 
-		case 3 :
+	if (number_of_letters == 3) {
 			for (i = 0; i < buffer_index + 1; i++) {
 				str_length = splitted_str_data[nodes];
 				compressed_data = buffer[nodes];
@@ -1425,9 +1426,9 @@ int main() {
 				}
 				nodes--;
 			}
-			break;
+	}
 
-		case 4 :
+		if (number_of_letters == 4) {
 			for (i = 0; i < buffer_index + 1; i++) {
 				str_length = splitted_str_data[nodes];
 				compressed_data = buffer[nodes];
@@ -1464,9 +1465,9 @@ int main() {
 				}
 				nodes--;
 			}
-			break;
+	}
 
-		case 5 :
+		if (number_of_letters == 5) {
 			for (i = 0; i < buffer_index + 1; i++) {
 				str_length = splitted_str_data[nodes];
 				compressed_data = buffer[nodes];
@@ -1507,9 +1508,9 @@ int main() {
 				}
 				nodes--;
 			}
-			break;
+	}
 
-		default:
+		if (number_of_letters > 5) {
 for (i = 0; i < buffer_index + 1; i++) {
     str_length = splitted_str_data[nodes];
     compressed_data = buffer[nodes];
@@ -1750,8 +1751,8 @@ for (i = 0; i < buffer_index + 1; i++) {
     }
     nodes--;
 }
-break;
-    }
+	}
+    
 	////printf("\nstrcmp value: %d\n", strcmp(str, decompressed_str));
 	if (strcmp(str, decompressed_str) == 0) { 
 		printf("\nOriginal String:	%s\nLength: %d characters \nOriginal Size: %d bits\nCompressed Size: %d bits\n", str, untouched_strlen, untouched_strlen*8, index);
@@ -1760,16 +1761,16 @@ break;
 		printf("\n/*************************************************************************************************/\nERROR: Original and decompressed strings not the same\nThe original string: %s \nThe decompressed string: %s\n", str, decompressed_str);
 	}
     //free memory...
-    str = NULL;
-    decompressed_str = NULL;
-    buffer = NULL;
-    splitted_str_data = NULL;
-    data_stream = NULL;
-    free(splitted_str_data);
-    free(buffer);
-    free(str);
-    free(decompressed_str);
-    free(data_stream);
+  //  str = NULL;
+ //   decompressed_str = NULL;
+ //   buffer = NULL;
+  //  splitted_str_data = NULL;
+  //  data_stream = NULL;
+  //  free(splitted_str_data);
+  //  free(buffer);
+    //free(str);
+   // free(decompressed_str);
+   // free(data_stream);
 	
     //***********OPTIMIZED
 	gettimeofday(&stopDec, NULL);
