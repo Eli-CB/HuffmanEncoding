@@ -184,10 +184,6 @@ bool checkValid(char **input) {
     bool notValid = true;
     int len = strlen(*input);
     for (i = 0; i < len; i++) {
-        // if ((*input)[i] == ('\x20')) {
-        //   printf("Don't use spaces!");
-        //   notValid = false;
-        // }
         if ((*input)[i] <= 96 || (*input)[i] >= 123) {
             printf("%c isn't a valid input!\n",(*input)[i]);
             notValid = false;
@@ -196,33 +192,30 @@ bool checkValid(char **input) {
     return notValid;
 }
 
-int main() {                                  //***********OPTIMIZED
+int main() {                                
 
   int sorted_freq[26] = { 0 };
-  char* str = (char*)malloc(1024);                  //***********OPTIMIZED
-  if(str == NULL) {                           //ELI ** OPT
+  char* str = (char*)malloc(1024);                  
+  if(str == NULL) {                           
     printf("Memory allocation failed");
     return 0;
   }
-  //int* buffer;							                  //***********Added for Overflow Testing
-        int* buffer = (int*)malloc(1024); 
-	if(buffer == NULL) {                           //ELI ** OPT
+  int* buffer = (int*)malloc(1024); 
+  if(buffer == NULL) {                           
     printf("Memory allocation failed");
     return 0;
-  }		//***********Added for Overflow Testing
-	int* splitted_str_data = (int*)malloc(1024);     //***********Added for Overflow Testing
-	 if(splitted_str_data == NULL) {                           //ELI ** OPT
+  }	
+  int* splitted_str_data = (int*)malloc(1024);     
+  if(splitted_str_data == NULL) {                           
     printf("Memory allocation failed");
     return 0;
   }
 	//126 bits: asasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaassssa
-	//127 bits: asasassasaasasassasaasasassasaasasasssasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaassssa
-	//sdasfasdfasdfsadasasdafasdfasdfsadfsdfsddsdsasdasdfasdfsdafsdfasdfas
 
   int i, j, k = 0;
-	int buffer_index = 0;
-	int str_index = 0;
-	int compressed_data = 1;           //***********OPTIMIZED
+  int buffer_index = 0;
+  int str_index = 0;
+  int compressed_data = 1;           //***********OPTIMIZED
 
     //unsigned long int not supported by 32 bit system
 
@@ -237,7 +230,7 @@ int main() {                                  //***********OPTIMIZED
     int unsorted_letterFreq[26] = { 0 };
     int number_of_letters = 0;
 
-    printf("\nYou entered: ");
+    //printf("\nYou entered: ");
     for (i = 0; i < 26; i++) {
 		//while (1);
         if (sorted_freq[i] != 0) {
@@ -267,10 +260,10 @@ int main() {                                  //***********OPTIMIZED
     //freq_sorted is now sorted
     insertionSort(sorted_freq);
 
-    printf("\nAfter sorted: ");
+    //printf("\nAfter sorted: ");
     for (i = 0; i < 26; i++) {
         if (sorted_freq[i] != 0) {
-            printf("%d", sorted_freq[i]);
+            ///printf("%d", sorted_freq[i]);
         }
     }
 
@@ -286,7 +279,7 @@ int main() {                                  //***********OPTIMIZED
             // Only checks for letters that were typed
             if (unsorted_letterFreq[i] != 0) {
                 if (sorted_freq[k] == unsorted_letterFreq[i]) {
-                    printf("\nLetter %c : %d", letters[i], unsorted_letterFreq[i]);
+                    //printf("\nLetter %c : %d", letters[i], unsorted_letterFreq[i]);
                     sorted_freq[k] = 0;
                     alpha[k] = letters[i];
                     temp--;
@@ -303,11 +296,10 @@ int main() {                                  //***********OPTIMIZED
     int bit_to_add = 0;
     int index = 1;
 	int* data_stream = (int*)malloc((strlen(str)*bits_for_safe_shifting)+1);
-	if (data_stream == NULL) {                           //ELI ** OPT
+	if (data_stream == NULL) {                           
 		printf("Memory allocation failed");
 		return 0;
 	}
-	data_stream[strlen(str)*bits_for_safe_shifting] = '\0';
     printf("\nStart Bit '1' is added to the data stream\n");
     data_stream[0] = compressed_data;
 
@@ -315,8 +307,7 @@ int main() {                                  //***********OPTIMIZED
 		if (!safe_add(compressed_data, bits_for_safe_shifting)) {
 			//while (1);
 			i--;
-			buffer[buffer_index] = compressed_data;             //Added for overflow testing
-																//Added for overflow testing
+			buffer[buffer_index] = compressed_data;
 			splitted_str_data[buffer_index] = str_index;
 			str_index = 0;
 			compressed_data = 1;
@@ -329,11 +320,11 @@ int main() {                                  //***********OPTIMIZED
 			for (j = 0; j < number_of_letters; j++) {
 				if (number_of_letters == 1) {
 					if (str[i] == alpha[j]) {
-						bit_to_add = codes[j];					
+						//bit_to_add = codes[j];					
 						str_index++;
 						compressed_data <<= 1;
 						index++;
-						data_stream[i + 1] = bit_to_add;
+						data_stream[i + 1] = 0;
 						if (i == str_length - 1) {
 							//buffer_index++;
 							buffer[buffer_index] = compressed_data;
@@ -556,985 +547,227 @@ int main() {                                  //***********OPTIMIZED
 						}
 					}
 				}
+				else if (number_of_letters > 5) {
+					if (str[i] == alpha[j]) {
+						bit_to_add = codes[j];
+						if (bit_to_add == 0b001) {
+							str_index++;
+							compressed_data <<= 1;
+							data_stream[index] = 0;
+							index++;
+							printf("Added Bit 0 to data stream!!\n");
+							compressed_data <<= 1;
+							data_stream[index] = 0;
+							index++;
+							printf("Added Bit 0 to data stream!!\n");
+							compressed_data <<= 1;
+							compressed_data += 1;
+							data_stream[index] = 1;
+							index++;
+							printf("Added Bit 1 to data stream!!\n");
+						}
+						else if (bit_to_add == 0b101) {
+							str_index++;
+							compressed_data <<= 1;
+							compressed_data += 1;
+							data_stream[index] = 1;
+							index++;
+							printf("Added Bit 1 to data stream!!\n");
+							compressed_data <<= 1;
+							data_stream[index] = 0;
+							index++;
+							printf("Added Bit 0 to data stream!!\n");
+							compressed_data <<= 1;
+							compressed_data += 1;
+							data_stream[index] = 1;
+							index++;
+							printf("Added Bit 1 to data stream!!\n");
+						}
+						else if (bit_to_add == 0b1100) {
+							str_index++;
+							compressed_data <<= 1;
+							compressed_data += 1;
+							data_stream[index] = 1;
+							index++;
+							printf("Added Bit 1 to data stream!!\n");
+							compressed_data <<= 1;
+							compressed_data += 1;
+							data_stream[index] = 1;
+							index++;
+							printf("Added Bit 1 to data stream!!\n");
+							compressed_data <<= 1;
+							data_stream[index] = 0;
+							index++;
+							printf("Added Bit 0 to data stream!!\n");
+							compressed_data <<= 1;
+							data_stream[index] = 0;
+							index++;
+							printf("Added Bit 0 to data stream!!\n");
+						}
+						else if (bit_to_add == 0b0111) {
+							str_index++;
+							compressed_data <<= 1;
+							data_stream[index] = 0;
+							index++;
+							printf("Added Bit 0 to data stream!!\n");
+							compressed_data <<= 1;
+							compressed_data += 1;
+							data_stream[index] = 1;
+							index++;
+							printf("Added Bit 1 to data stream!!\n");
+							compressed_data <<= 1;
+							compressed_data += 1;
+							data_stream[index] = 1;
+							index++;
+							printf("Added Bit 1 to data stream!!\n");
+							compressed_data <<= 1;
+							compressed_data += 1;
+							data_stream[index] = 1;
+							index++;
+							printf("Added Bit 1 to data stream!!\n");
+
+						}
+						else if (bit_to_add == 0b1010) {
+							str_index++;
+							compressed_data <<= 1;
+							compressed_data += 1;
+							data_stream[index] = 1;
+							index++;
+							printf("Added Bit 1 to data stream!!\n");
+							compressed_data <<= 1;
+							data_stream[index] = 0;
+							index++;
+							printf("Added Bit 0 to data stream!!\n");
+							compressed_data <<= 1;
+							compressed_data += 1;
+							data_stream[index] = 1;
+							index++;
+							printf("Added Bit 1 to data stream!!\n");
+							compressed_data <<= 1;
+							data_stream[index] = 0;
+							index++;
+							printf("Added Bit 0 to data stream!!\n");
+
+						}
+						else if (bit_to_add == 0b1110) {
+							str_index++;
+							compressed_data <<= 1;
+							compressed_data += 1;
+							data_stream[index] = 1;
+							index++;
+							printf("Added Bit 1 to data stream!!\n");
+							compressed_data += 1;
+							data_stream[index] = 1;
+							index++;
+							printf("Added Bit 1 to data stream!!\n");
+							compressed_data <<= 1;
+							compressed_data += 1;
+							data_stream[index] = 1;
+							index++;
+							printf("Added Bit 1 to data stream!!\n");
+							compressed_data <<= 1;
+							data_stream[index] = 0;
+							index++;
+							printf("Added Bit 0 to data stream!!\n");
+
+						}
+						else if (bit_to_add == 0b0010) {
+							str_index++;
+							compressed_data <<= 1;
+							data_stream[index] = 0;
+							index++;
+							printf("Added Bit 0 to data stream!!\n");
+							compressed_data <<= 1;
+							data_stream[index] = 0;
+							index++;
+							printf("Added Bit 0 to data stream!!\n");
+							compressed_data <<= 1;
+							compressed_data += 1;
+							data_stream[index] = 1;
+							index++;
+							printf("Added Bit 1 to data stream!!\n");
+							compressed_data <<= 1;
+							data_stream[index] = 0;
+							index++;
+							printf("Added Bit 0 to data stream!!\n");
+
+						}
+						else if (bit_to_add == 0b1011) {
+							str_index++;
+							compressed_data <<= 1;
+							compressed_data += 1;
+							data_stream[index] = 1;
+							index++;
+							printf("Added Bit 1 to data stream!!\n");
+							compressed_data <<= 1;
+							data_stream[index] = 0;
+							index++;
+							printf("Added Bit 0 to data stream!!\n");
+							compressed_data <<= 1;
+							compressed_data += 1;
+							data_stream[index] = 1;
+							index++;
+							printf("Added Bit 1 to data stream!!\n");
+							compressed_data <<= 1;
+							compressed_data += 1;
+							data_stream[index] = 1;
+							index++;
+							printf("Added Bit 1 to data stream!!\n");
+
+						}
+						else if (bit_to_add == 0b0011) {
+							str_index++;
+							compressed_data <<= 1;
+							data_stream[index] = 0;
+							index++;
+							printf("Added Bit 0 to data stream!!\n");
+							compressed_data <<= 1;
+							data_stream[index] = 0;
+							index++;
+							printf("Added Bit 0 to data stream!!\n");
+							compressed_data <<= 1;
+							compressed_data += 1;
+							data_stream[index] = 1;
+							index++;
+							printf("Added Bit 1 to data stream!!\n");
+							compressed_data <<= 1;
+							compressed_data += 1;
+							data_stream[index] = 1;
+							index++;
+							printf("Added Bit 1 to data stream!!\n");
+
+						}
+						else if (bit_to_add == 0b1000) {			//codes[9]
+							str_index++;
+							compressed_data <<= 1;
+							compressed_data += 1;
+							data_stream[index] = 1;
+							index++;
+							printf("Added Bit 1 to data stream!!\n");
+							compressed_data <<= 1;
+							data_stream[index] = 0;
+							index++;
+							printf("Added Bit 0 to data stream!!\n");
+							compressed_data <<= 1;
+							data_stream[index] = 0;
+							index++;
+							printf("Added Bit 0 to data stream!!\n");
+							compressed_data <<= 1;
+							data_stream[index] = 0;
+							index++;
+							printf("Added Bit 0 to data stream!!\n");
+						}
+						if (i == str_length - 1) {
+							//buffer_index++;
+							buffer[buffer_index] = compressed_data;
+							splitted_str_data[buffer_index] = str_index;
+							printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
+						}
+					}
+				}
 			}
-		
 		}
 	}
-
-	
-			/*
-            else if (number_of_letters > 5) {
-                if (str[i] == alpha[j]) {
-                    //while (1);
-                    bit_to_add = codes[j];
-                    if (bit_to_add == 0b010) {
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b0111) {
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b0110) {
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b0011) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b0001) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b1001) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b0000) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b0101) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b01000) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b11000) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b01011) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b11101) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b01111) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b01101) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b11011) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b011110) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b111110) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b111111) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b101110) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b1001110) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b0001110) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b1011111) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b000011111) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b1100011111) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b10100011111) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b00100011111) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                }
-            }
-        }
-    }*/
 
     printf("\nCompressed Data: %d" , compressed_data);
     printf("\nCompressed Data Binary: ");
@@ -1554,20 +787,22 @@ int main() {                                  //***********OPTIMIZED
         } 
 			
     }                      //***********OPTIMIZED
-    char* decompressed_str = (char*)malloc(1024);
-    if(decompressed_str == NULL) {                        //ELI ** OPT
+    char* decompressed_str = (char*)malloc(untouched_strlen+2);
+    if(decompressed_str == NULL) {
       printf("Memory allocation failed");
       return 0;
     }
-    int pos = strlen(str) - 1;								//changed
+    int pos = untouched_strlen-1;								//changed from untouched_strlen-1
 	int nodes = buffer_index;
     switch (number_of_letters) {                          //***********OPTIMIZED
 		case 1 :                                            //Switch statements faster than if else
-			for (i = 0; i < str_length; i++) {
-				decompressed_str[pos] = alpha[0];
-				pos--;
-				compressed_data >>= 1;
-				
+			for (i = 0; i < buffer_index + 1; i++) {
+				for (j = 0; j < str_length; j++) {
+					decompressed_str[pos] = alpha[0];
+					pos--;
+					compressed_data >>= 1;
+				}
+				nodes--;
 			}
 			break;
 		case 2 :
@@ -1602,28 +837,20 @@ int main() {                                  //***********OPTIMIZED
 						compressed_data >>= 1;
 						if (compressed_data & 1) {
 							decompressed_str[pos] = alpha[2];
-							//printf("Found 11!\n");
 							pos--;
 						}
 						else {
 							decompressed_str[pos] = alpha[1];
-							//printf("Found 01!\n");
 							pos--;
 						}
 					}
 					else
 					{
-						//compressed_data >>= 1;
 						decompressed_str[pos] = alpha[0];
-						//printf("Found 00!\n");
 						pos--;
 					}
 					compressed_data >>= 1;
-
-					//printf("\nYYYYYYYYYY	Str_length: %d, compressed_data: %d, current_buffer_index: %d\n", str_length, compressed_data, nodes);
-
 				}
-				//printf("\nXXXXXXXXXXXXXXXXXXXXXX	Str_length: %d, compressed_data: %d, current_buffer_index: %d\n", str_length, compressed_data, nodes);
 				nodes--;
 			}
 			break;
@@ -1711,6 +938,104 @@ int main() {                                  //***********OPTIMIZED
 			break;
 
 		default:
+			for (i = 0; i < buffer_index + 1; i++) {
+				str_length = splitted_str_data[nodes];
+				compressed_data = buffer[nodes];
+				printf("\nXXXXXXXXXXXXXXXXXXXXXX	Str_length: %d, compressed_data: %d, current_buffer_index: %d\n", str_length, compressed_data, nodes);
+				for (j = 0; j < str_length; j++) {
+					if (compressed_data & 1) {
+						compressed_data >>= 1;
+
+						if (compressed_data & 1) {
+							compressed_data >>= 1;
+
+							if (compressed_data & 1) {
+								compressed_data >>= 1;
+
+								if (compressed_data & 1) {
+
+								}
+								else {
+									decompressed_str[pos] = alpha[3];
+									pos--;
+								}
+							}
+							else {
+								compressed_data >>= 1;
+								if (compressed_data & 1) {
+									decompressed_str[pos] = alpha[7];
+									pos--;
+								}
+								else {
+									decompressed_str[pos] = alpha[8];
+									pos--;
+								}
+							}
+						}
+						else {
+							compressed_data >>= 1;
+							if (compressed_data & 1) {
+								decompressed_str[pos] = alpha[1];
+								pos--;
+							}
+							else {
+								decompressed_str[pos] = alpha[0];
+								pos--;
+							}
+
+
+						}
+					}
+					else
+					{
+						compressed_data >>= 1;
+						if (compressed_data & 1) {
+							compressed_data >>= 1;
+							if (compressed_data & 1) {
+								compressed_data >>= 1;
+								if (compressed_data & 1) {
+									decompressed_str[pos] = alpha[5];
+									pos--;
+								}
+							}
+							else {
+								compressed_data >>= 1;
+								if (compressed_data & 1) {
+									decompressed_str[pos] = alpha[4];
+									pos--;
+								}
+								else {
+									decompressed_str[pos] = alpha[6];
+									pos--;
+								}
+							}
+						}
+						else {
+							compressed_data >>= 1;
+							if (compressed_data & 1) {
+								compressed_data >>= 1;
+								if (compressed_data & 1) {
+									decompressed_str[pos] = alpha[2];
+									pos--;
+								}
+
+							}
+							else {
+								compressed_data >>= 1;
+								if (compressed_data & 1) {
+									decompressed_str[pos] = alpha[9];
+									pos--;
+								}
+
+							}
+
+						}
+					}
+					compressed_data >>= 1;
+
+				}
+				nodes--;
+			}
 			break;
     }
 	//printf("\nstrcmp value: %d\n", strcmp(str, decompressed_str));
