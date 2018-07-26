@@ -258,10 +258,10 @@ int main() {                                  //***********OPTIMIZED
 		bits_for_safe_shifting -= 2;
 	}
 	else if (number_of_letters <= 14) {
-		bits_for_safe_shifting = 5;
+		bits_for_safe_shifting = 6;
 	}
 	else {
-		bits_for_safe_shifting = 11;
+		bits_for_safe_shifting = 10;
 	}
 
     //freq_sorted is now sorted
@@ -279,6 +279,7 @@ int main() {                                  //***********OPTIMIZED
     char letters[26] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
     int temp = number_of_letters;
     int str_length = strlen(str);
+	int untouched_strlen = str_length;
     // While there are still letters
     while (temp > 0) {
         for (i = 0; i < 26; i++) {
@@ -1712,7 +1713,7 @@ int main() {                                  //***********OPTIMIZED
 			break;
     }
 
-    printf("\nOriginal String:	%s	Length: %d	Original Size: %d bits		Compressed Size: %d bits\n", str, str_length, str_length*8, index);
+    printf("\nOriginal String:	%s	Length: %d	Original Size: %d bits		Compressed Size: %d bits\n", str, untouched_strlen, untouched_strlen*8, index);
     printf("Decompressed String:	%s\n", decompressed_str);
     //free memory...
     str = NULL;
