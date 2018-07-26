@@ -1726,6 +1726,7 @@ for (i = 0; i < buffer_index + 1; i++) {
                             if (compressed_data & 1) { // 110000
                                 decompressed_str[pos] = alpha[20];
                                 pos--;
+								compressed_data >>= 1;
 								continue;
                             } else { // 010000
                                 decompressed_str[pos] = alpha[14];
