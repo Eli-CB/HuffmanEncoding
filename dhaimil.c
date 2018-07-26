@@ -1519,195 +1519,221 @@ int main() {
 			break;
 
 		default:
-			for (i = 0; i < buffer_index + 1; i++) {
-				str_length = splitted_str_data[nodes];
-				compressed_data = buffer[nodes];
-				printf("\nXXXXXXXXXXXXXXXXXXXXXX	Str_length: %d, compressed_data: %d, current_buffer_index: %d\n", str_length, compressed_data, nodes);
-				for (j = 0; j < str_length; j++) {
-					if (compressed_data & 1) { // 1
-						compressed_data >>= 1;
+for (i = 0; i < buffer_index + 1; i++) {
+    str_length = splitted_str_data[nodes];
+    compressed_data = buffer[nodes];
+    printf("\nXXXXXXXXXXXXXXXXXXXXXX	Str_length: %d, compressed_data: %d, current_buffer_index: %d\n", str_length, compressed_data, nodes);
+    for (j = 0; j < str_length; j++) {
+        if (compressed_data & 1) { // 1
+            compressed_data >>= 1;
 
-						if (compressed_data & 1) { // 11
-							compressed_data >>= 1;
+            if (compressed_data & 1) { // 11
+                compressed_data >>= 1;
 
-							if (compressed_data & 1) { // 111
-								compressed_data >>= 1;
+                if (compressed_data & 1) { // 111
+                    compressed_data >>= 1;
 
-								if (compressed_data & 1) { // 1111
-									compressed_data >>= 1;
-								}
-								else {	// 0111
-									decompressed_str[pos] = alpha[3];
-									pos--;
-								}
-									if (compressed_data & 1) { // 11111
-										decompressed_str[pos] = alpha[11];
-										pos--;
-									}
-									else { // 01111
-										decompressed_str[pos] = alpha[10];
-										pos--;
-									}
-							}
-							else { // 011
-								compressed_data >>= 1;
-								if (compressed_data & 1) { // 1011
-									decompressed_str[pos] = alpha[7];
-									pos--;
-								}
-								else { // 0011
-									decompressed_str[pos] = alpha[8];
-									pos--;
-								}
-							}
-						} // CORRECT UP TO HERE
-						else { // 01
-							compressed_data >>= 1;
-							if (compressed_data & 1) { // 101
-								decompressed_str[pos] = alpha[1];
-								pos--;
-							}
-							else { // 001
- 								decompressed_str[pos] = alpha[0];
-								pos--;
-							}
+                    if (compressed_data & 1) { // 1111
+                        compressed_data >>= 1;
+                    }
+                    else {	// 0111
+                        decompressed_str[pos] = alpha[3];
+                        pos--;
+						continue;
+                    }
+                    if (compressed_data & 1) { // 11111
+                        decompressed_str[pos] = alpha[11];
+                        pos--;
+						continue;
+                    }
+                    else { // 01111
+                        decompressed_str[pos] = alpha[10];
+                        pos--;
+						continue;
+                    }
+                }
+                else { // 011
+                    compressed_data >>= 1;
+                    if (compressed_data & 1) { // 1011
+                        decompressed_str[pos] = alpha[7];
+                        pos--;
+						continue;
+                    }
+                    else { // 0011
+                        decompressed_str[pos] = alpha[8];
+                        pos--;
+						continue;
+                    }
+                }
+            } // CORRECT UP TO HERE
+            else { // 01
+                compressed_data >>= 1;
+                if (compressed_data & 1) { // 101
+                    decompressed_str[pos] = alpha[1];
+                    pos--;
+					continue;
+                }
+                else { // 001
+                    decompressed_str[pos] = alpha[0];
+                    pos--;
+					continue;
+                }
 
 
-						}
-					} // // CORRECT UP TO HERE
-					else // 0
-					{
-						compressed_data >>= 1;
-						if (compressed_data & 1) { // 10
-							compressed_data >>= 1;
-							if (compressed_data & 1) { // 110
-								compressed_data >>= 1;
-								if (compressed_data & 1) { // 1110
-									decompressed_str[pos] = alpha[5];
-									pos--;
-								} else { // 0110
-									compressed_data >>= 1;
-									if (compressed_data & 1) { // 10110
-										compressed_data >>= 1;
-										if (compressed_data & 1) { // 110110
-											decompressed_str[pos] = alpha[19];
-											pos--;
-										} else { // 010110
-											compressed_data >>= 1;
-											if (compressed_data & 1) { // 1010110
-												compressed_data >>= 1;
-												if (compressed_data & 1) { // 11010110
-													compressed_data >>= 1;
-												} else { // 01010110
-													compressed_data >>= 1;
-													if (compressed_data & 1) { // 101010110
-														decompressed_str[pos] = alpha[23];
-														pos--;
-													} else { // 001010110
-														compressed_data >>= 1;
-														if (compressed_data & 1) { // 1001010110
-															//compressed_data >>= 1;
-														} else { // 0001010110
-															decompressed_str[pos] = alpha[25];
-															pos--;
-														}
-													}			 
-												}
-												if (compressed_data & 1) { // 111010110
-													decompressed_str[pos] = alpha[24];
-													pos--;
-												} else { // 011010110
-													decompressed_str[pos] = alpha[22];
-													pos--;
-												}
-											} else { // 0010110
-												decompressed_str[pos] = alpha[21];
-												pos--;
-											}
-										}
-									} else { // 00110
-										compressed_data >>= 1;
-										if (compressed_data & 1) { // 100110
-											decompressed_str[pos] = alpha[15];
-											pos--;
-										} else { // 000110
-											decompressed_str[pos] = alpha[17];
-											pos--;
-										}											
-									}
-									
-								}
-							}
-							else { // 010
-								compressed_data >>= 1;
-								if (compressed_data & 1) { // 1010
-									decompressed_str[pos] = alpha[4];
-									pos--;
-								}
-								else { // 0010
-									decompressed_str[pos] = alpha[6];
-									pos--;
-								}
-							}
-						}
-						else { // 00
-							compressed_data >>= 1;
-							if (compressed_data & 1) { // 100
-								compressed_data >>= 1;
-								if (compressed_data & 1) { // 1100
-									decompressed_str[pos] = alpha[2];
-									pos--;
-								} else { // 0100
-									compressed_data >>= 1;
-									if (compressed_data & 1) { // 10100
-										decompressed_str[pos] = alpha[13];
-										pos--;
-									} 
-									else { // 00100
-										decompressed_str[pos] = alpha[12];
-										pos--;
-									}										
-								}
+            }
+        } // // CORRECT UP TO HERE
+        else // 0
+        {
+            compressed_data >>= 1;
+            if (compressed_data & 1) { // 10
+                compressed_data >>= 1;
+                if (compressed_data & 1) { // 110
+                    compressed_data >>= 1;
+                    if (compressed_data & 1) { // 1110
+                        decompressed_str[pos] = alpha[5];
+                        pos--;
+						continue;
+                    } else { // 0110
+                        compressed_data >>= 1;
+                        if (compressed_data & 1) { // 10110
+                            compressed_data >>= 1;
+                            if (compressed_data & 1) { // 110110
+                                decompressed_str[pos] = alpha[19];
+                                pos--;
+								continue;
+                            } else { // 010110
+                                compressed_data >>= 1;
+                                if (compressed_data & 1) { // 1010110
+                                    compressed_data >>= 1;
+                                    if (compressed_data & 1) { // 11010110
+                                        compressed_data >>= 1;
+                                    } else { // 01010110
+                                        compressed_data >>= 1;
+                                        if (compressed_data & 1) { // 101010110
+                                            decompressed_str[pos] = alpha[23];
+                                            pos--;
+											continue;
+                                        } else { // 001010110
+                                            compressed_data >>= 1;
+                                            if (compressed_data & 1) { // 1001010110
+                                                //compressed_data >>= 1;
+                                            } else { // 0001010110
+                                                decompressed_str[pos] = alpha[25];
+                                                pos--;
+												continue;
+                                            }
+                                        }
+                                    }
+                                    if (compressed_data & 1) { // 111010110
+                                        decompressed_str[pos] = alpha[24];
+                                        pos--;
+										continue;
+                                    } else { // 011010110
+                                        decompressed_str[pos] = alpha[22];
+                                        pos--;
+										continue;
+                                    }
+                                } else { // 0010110
+                                    decompressed_str[pos] = alpha[21];
+                                    pos--;
+									continue;
+                                }
+                            }
+                        } else { // 00110
+                            compressed_data >>= 1;
+                            if (compressed_data & 1) { // 100110
+                                decompressed_str[pos] = alpha[15];
+                                pos--;
+								continue;
+                            } else { // 000110
+                                decompressed_str[pos] = alpha[17];
+                                pos--;
+								continue;
+                            }
+                        }
 
-							}
-							else { // 000
-								compressed_data >>= 1;
-								if (compressed_data & 1) { // 1000
-									decompressed_str[pos] = alpha[9];
-									pos--;
-								} else { // 0000
-									compressed_data >>= 1;
-									if (compressed_data & 1) { // 10000
-										compressed_data >>= 1;
-										if (compressed_data & 1) { // 110000
-											decompressed_str[pos] = alpha[20];
-											pos--;
-										} else { // 010000
-											decompressed_str[pos] = alpha[14];
-											pos--;
-										}
-									} else { // 00000
-										compressed_data >>= 1;
-										if (compressed_data & 1) { // 100000
-											decompressed_str[pos] = alpha[16];
-											pos--;
-										} else { // 000000
-											decompressed_str[pos] = alpha[18];
-											pos--;
-										}
-									}
-								}
+                    }
+                }
+                else { // 010
+                    compressed_data >>= 1;
+                    if (compressed_data & 1) { // 1010
+                        decompressed_str[pos] = alpha[4];
+                        pos--;
+						continue;
+                    }
+                    else { // 0010
+                        decompressed_str[pos] = alpha[6];
+                        pos--;
+						continue;
+                    }
+                }
+            }
+            else { // 00
+                compressed_data >>= 1;
+                if (compressed_data & 1) { // 100
+                    compressed_data >>= 1;
+                    if (compressed_data & 1) { // 1100
+                        decompressed_str[pos] = alpha[2];
+                        pos--;
+						continue;
+                    } else { // 0100
+                        compressed_data >>= 1;
+                        if (compressed_data & 1) { // 10100
+                            decompressed_str[pos] = alpha[13];
+                            pos--;
+							continue;
+                        }
+                        else { // 00100
+                            decompressed_str[pos] = alpha[12];
+                            pos--;
+							continue;
+                        }
+                    }
 
-							}
+                }
+                else { // 000
+                    compressed_data >>= 1;
+                    if (compressed_data & 1) { // 1000
+                        decompressed_str[pos] = alpha[9];
+                        pos--;
+						continue;
+                    } else { // 0000
+                        compressed_data >>= 1;
+                        if (compressed_data & 1) { // 10000
+                            compressed_data >>= 1;
+                            if (compressed_data & 1) { // 110000
+                                decompressed_str[pos] = alpha[20];
+                                pos--;
+								continue;
+                            } else { // 010000
+                                decompressed_str[pos] = alpha[14];
+                                pos--;
+								continue;
+                            }
+                        } else { // 00000
+                            compressed_data >>= 1;
+                            if (compressed_data & 1) { // 100000
+                                decompressed_str[pos] = alpha[16];
+                                pos--;
+								continue;
+                            } else { // 000000
+                                decompressed_str[pos] = alpha[18];
+                                pos--;
+								continue;
+                            }
+                        }
+                    }
 
-						}
-					}
-					compressed_data >>= 1;
+                }
 
-				}
-				nodes--;
-			}
-			break;
+            }
+        }
+        compressed_data >>= 1;
+
+    }
+    nodes--;
+}
+break;
     }
 	//printf("\nstrcmp value: %d\n", strcmp(str, decompressed_str));
 	if (strcmp(str, decompressed_str) == 0) { 
