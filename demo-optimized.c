@@ -171,7 +171,6 @@ void optimal_encoding(int codes[26], int number_of_letters) {
 
 bool safe_add(int compressed_data, int bit) {
   printf("compressed_data = %d\n", compressed_data);
-	//int remaining_spaces = INT_MAX - compressed_data;
     if (compressed_data >= INT_MAX>>bit) {
         printf("\n************HANDLE OVERFLOW************\n");
 		printf("\nCompressed Number XXXXXXX : %d	INT_MAX: %d	INT_MAX>>bit: %d\n",compressed_data, INT_MAX, INT_MAX >> bit);
@@ -179,20 +178,7 @@ bool safe_add(int compressed_data, int bit) {
     }
     return true;
 }
-/*
-void add0bit(unsigned int *compressed_data, int data_stream[100], int a) {
-    *compressed_data <<= 1;
-    data_stream[a] = 0;
-    printf("Added Bit 0 to data stream!!\n");
-}
 
-void add1bit(unsigned int *compressed_data, int data_stream[100], int a) {
-    *compressed_data <<= 1;
-    *compressed_data += 1;
-    data_stream[a] = 1;
-    printf("Added Bit 1 to data stream!!\n");
-}
-*/
 bool checkValid(char **input) {
     int i;
     bool notValid = true;
@@ -211,9 +197,8 @@ bool checkValid(char **input) {
 }
 
 int main() {                                  //***********OPTIMIZED
+
   int sorted_freq[26] = { 0 };
-  // Change from char str[200] to char* str
-  //char* str;
   char* str = (char*)malloc(1024);                  //***********OPTIMIZED
   if(str == NULL) {                           //ELI ** OPT
     printf("Memory allocation failed");
@@ -225,7 +210,6 @@ int main() {                                  //***********OPTIMIZED
     printf("Memory allocation failed");
     return 0;
   }		//***********Added for Overflow Testing
-	//int* splitted_str_data;							        //***********Added for Overflow Testing
 	int* splitted_str_data = (int*)malloc(1024);     //***********Added for Overflow Testing
 	 if(splitted_str_data == NULL) {                           //ELI ** OPT
     printf("Memory allocation failed");
@@ -262,6 +246,23 @@ int main() {                                  //***********OPTIMIZED
         unsorted_letterFreq[i] = sorted_freq[i];
         printf("%d", unsorted_letterFreq[i]);
     }
+
+	int bits_for_safe_shifting = number_of_letters;		//ELISMAJOR
+	if (number_of_letters == 1) {
+		bits_for_safe_shifting++;
+	}
+	else if (number_of_letters > 1 && number_of_letters < 5) {
+		bits_for_safe_shifting--;
+	}
+	else if (number_of_letters == 5) {
+		bits_for_safe_shifting -= 2;
+	}
+	else if (number_of_letters <= 14) {
+		bits_for_safe_shifting = 5;
+	}
+	else {
+		bits_for_safe_shifting = 11;
+	}
 
     //freq_sorted is now sorted
     insertionSort(sorted_freq);
@@ -300,20 +301,15 @@ int main() {                                  //***********OPTIMIZED
 
     int bit_to_add = 0;
     int index = 1;
-	int* data_stream = (int*)malloc((strlen(str)*number_of_letters)+1);
+	int* data_stream = (int*)malloc((strlen(str)*bits_for_safe_shifting)+1);
 	if (data_stream == NULL) {                           //ELI ** OPT
 		printf("Memory allocation failed");
 		return 0;
 	}
-	data_stream[strlen(str)*number_of_letters] = '\0';
-   //int data_stream[100] = { 0 };
-    //compressed_data = 1;
+	data_stream[strlen(str)*bits_for_safe_shifting] = '\0';
     printf("\nStart Bit '1' is added to the data stream\n");
     data_stream[0] = compressed_data;
-	int bits_for_safe_shifting = number_of_letters;
-	if (bits_for_safe_shifting == 1) {
-		bits_for_safe_shifting++;
-	}
+
 	for (i = 0; i < str_length; i++) {
 		if (!safe_add(compressed_data, bits_for_safe_shifting)) {
 			//while (1);
@@ -566,98 +562,6 @@ int main() {                                  //***********OPTIMIZED
 
 	
 			/*
-            else if (number_of_letters == 5) {
-                if (str[i] == alpha[j]) {
-                    //while (1);
-                    bit_to_add = codes[j];
-                    if (bit_to_add == 0b00) {
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b01) {
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b11) {
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b010) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-                    else if (bit_to_add == 0b110) { //double check this pls
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add1bit(&compressed_data, data_stream, index);
-                        index++;
-                        if(!safe_add(compressed_data)) {
-                            compressed_data2 = compressed_data;
-                            compressed_data = 1;
-                        }
-                        add0bit(&compressed_data, data_stream, index);
-                        index++;
-                    }
-
-                }
-            }
-
-
-
             else if (number_of_letters > 5) {
                 if (str[i] == alpha[j]) {
                     //while (1);
