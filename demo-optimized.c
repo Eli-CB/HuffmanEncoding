@@ -1551,7 +1551,8 @@ int main() {                                  //***********OPTIMIZED
         scanf("%d", &input);
         if (input == 1) {
             flag = 0;
-        }
+        } 
+			
     }                      //***********OPTIMIZED
     char* decompressed_str = (char*)malloc(1024);
     if(decompressed_str == NULL) {                        //ELI ** OPT
@@ -1712,9 +1713,13 @@ int main() {                                  //***********OPTIMIZED
 		default:
 			break;
     }
-
-    printf("\nOriginal String:	%s	Length: %d	Original Size: %d bits		Compressed Size: %d bits\n", str, untouched_strlen, untouched_strlen*8, index);
-    printf("Decompressed String:	%s\n", decompressed_str);
+	//printf("\nstrcmp value: %d\n", strcmp(str, decompressed_str));
+	if (strcmp(str, decompressed_str) == 0) { 
+		printf("\nOriginal String:	%s\nLength: %d	\nOriginal Size: %d bits\nCompressed Size: %d bits\n", str, untouched_strlen, untouched_strlen*8, index);
+		printf("Decompressed String:	%s\n", decompressed_str);
+	} else {
+		printf("\n/*************************************************************************************************/\nERROR: Original and decompressed strings not the same\nThe original string: %s \nThe decompressed string: %s\n", str, decompressed_str);
+	}
     //free memory...
     str = NULL;
     decompressed_str = NULL;
