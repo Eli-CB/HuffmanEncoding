@@ -1369,7 +1369,7 @@ int main() {
 	gettimeofday(&stop, NULL);
 	double diff = stop.tv_usec - start.tv_usec;
 	double compTime = diff + (0.000001f * diff);
-	printf("\nCompression time using timeval: %0.4f microseconds\n", compTime);
+	printf("\n\nCompression time: %0.4f microseconds\n", compTime);
 	//printf("Time in microseconds: %ld microseconds\n",
     //        ((stop.tv_sec - start.tv_sec)*1000000L
      //      +stop.tv_usec) - start.tv_usec
@@ -1812,7 +1812,8 @@ break;
 	gettimeofday(&stopDec, NULL);
 	double diffDec = stopDec.tv_usec - startDec.tv_usec;
 	double compTimeDec = diffDec + (0.000001f * diffDec);
-	printf("\nDecompression time using timeval: %0.4f microseconds\n", compTimeDec);
+	printf("\nDecompression time: %0.4f microseconds\n", compTimeDec);
+	printf("\nTotal time: %0.4f microseconds\n", compTime + compTimeDec);
 	
 	//clock_t endDec = clock();
 	//double time_spent_dec = 1000*(double)(endDec - beginDec) / CLOCKS_PER_SEC;
