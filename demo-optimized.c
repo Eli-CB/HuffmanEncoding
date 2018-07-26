@@ -5,6 +5,8 @@
 #include <stdint.h>
 #include <limits.h>
 #include <stdbool.h>
+#include <time.h>
+#include <sys/time.h>
 
 void insertionSort(int freq[26]) {
     int i,j,a = 0;
@@ -170,10 +172,10 @@ void optimal_encoding(int codes[26], int number_of_letters) {
 }
 
 bool safe_add(int compressed_data, int bit) {
-  printf("compressed_data = %d\n", compressed_data);
+  //printf("compressed_data = %d\n", compressed_data);
     if (compressed_data >= INT_MAX>>bit) {
-        printf("\n************HANDLE OVERFLOW************\n");
-		printf("\nCompressed Number XXXXXXX : %d	INT_MAX: %d	INT_MAX>>bit: %d\n",compressed_data, INT_MAX, INT_MAX >> bit);
+        //printf("\n************HANDLE OVERFLOW************\n");
+		//printf("\nCompressed Number XXXXXXX : %d	INT_MAX: %d	INT_MAX>>bit: %d\n",compressed_data, INT_MAX, INT_MAX >> bit);
         return false;
     }
     return true;
@@ -193,21 +195,23 @@ bool checkValid(char **input) {
 }
 
 int main() {                                
-
+//  clock_t begin = clock();	
+  
   int sorted_freq[26] = { 0 };
-  char* str = (char*)malloc(1024);                  
+  char* str = (char*)malloc(1024); 
+  
   if(str == NULL) {                           
-    printf("Memory allocation failed");
+    //printf("Memory allocation failed");
     return 0;
   }
   int* buffer = (int*)malloc(1024); 
   if(buffer == NULL) {                           
-    printf("Memory allocation failed");
+    //printf("Memory allocation failed");
     return 0;
   }	
   int* splitted_str_data = (int*)malloc(1024);     
   if(splitted_str_data == NULL) {                           
-    printf("Memory allocation failed");
+    //printf("Memory allocation failed");
     return 0;
   }
 	//126 bits: asasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaassssa
@@ -224,7 +228,8 @@ int main() {
 
         scanf("%s", str);
     } while(!checkValid(&str));
-
+	struct timeval start, stop;
+    gettimeofday(&start, NULL);
     getFrequency(str, sorted_freq);
 
     int unsorted_letterFreq[26] = { 0 };
@@ -232,12 +237,11 @@ int main() {
 
     //printf("\nYou entered: ");
     for (i = 0; i < 26; i++) {
-		//while (1);
-        if (sorted_freq[i] != 0) {
+		if (sorted_freq[i] != 0) {
             number_of_letters++;
         }
         unsorted_letterFreq[i] = sorted_freq[i];
-        printf("%d", unsorted_letterFreq[i]);
+      //  printf("%d", unsorted_letterFreq[i]);
     }
 
 	int bits_for_safe_shifting = number_of_letters;		//ELISMAJOR
@@ -260,10 +264,10 @@ int main() {
     //freq_sorted is now sorted
     insertionSort(sorted_freq);
 
-    //printf("\nAfter sorted: ");
+    ////printf("\nAfter sorted: ");
     for (i = 0; i < 26; i++) {
         if (sorted_freq[i] != 0) {
-            ///printf("%d", sorted_freq[i]);
+            /////printf("%d", sorted_freq[i]);
         }
     }
 
@@ -273,13 +277,14 @@ int main() {
     int temp = number_of_letters;
     int str_length = strlen(str);
 	int untouched_strlen = str_length;
+	printf("LETTER   | FREQUENCY");	
     // While there are still letters
     while (temp > 0) {
         for (i = 0; i < 26; i++) {
             // Only checks for letters that were typed
             if (unsorted_letterFreq[i] != 0) {
                 if (sorted_freq[k] == unsorted_letterFreq[i]) {
-                    //printf("\nLetter %c : %d", letters[i], unsorted_letterFreq[i]);
+                    printf("\nLetter %c : %d", letters[i], unsorted_letterFreq[i]);
                     sorted_freq[k] = 0;
                     alpha[k] = letters[i];
                     temp--;
@@ -297,10 +302,10 @@ int main() {
     int index = 1;
 	int* data_stream = (int*)malloc((strlen(str)*bits_for_safe_shifting)+1);
 	if (data_stream == NULL) {                           
-		printf("Memory allocation failed");
+		//printf("Memory allocation failed");
 		return 0;
 	}
-    printf("\nStart Bit '1' is added to the data stream\n");
+    //printf("\nStart Bit '1' is added to the data stream\n");
     data_stream[0] = compressed_data;
 
 	for (i = 0; i < str_length; i++) {
@@ -312,11 +317,11 @@ int main() {
 			str_index = 0;
 			compressed_data = 1;
 			//while (1);
-			printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
+			//printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
 			buffer_index++;
 		}
 		else {
-			printf("\nLetter: %c\n", str[i]);
+			//printf("\nLetter: %c\n", str[i]);
 			for (j = 0; j < number_of_letters; j++) {
 				if (number_of_letters == 1) {
 					if (str[i] == alpha[j]) {
@@ -329,9 +334,9 @@ int main() {
 							//buffer_index++;
 							buffer[buffer_index] = compressed_data;
 							splitted_str_data[buffer_index] = str_index;
-							printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
+							//printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
 						}
-						printf("Added Bit %d to data stream!!\n", bit_to_add);
+						//printf("Added Bit %d to data stream!!\n", bit_to_add);
 					
 					}
 
@@ -350,9 +355,9 @@ int main() {
 							//buffer_index++;
 							buffer[buffer_index] = compressed_data;
 							splitted_str_data[buffer_index] = str_index;
-							printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
+							//printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
 						}
-						printf("Added Bit %d to data stream!!\n", bit_to_add);
+						//printf("Added Bit %d to data stream!!\n", bit_to_add);
 
 
 					}
@@ -365,7 +370,7 @@ int main() {
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 
 						}
 						else if (bit_to_add == 0b01) {
@@ -373,12 +378,12 @@ int main() {
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b11) {
 							str_index++;
@@ -386,18 +391,18 @@ int main() {
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 						}
 						if (i == str_length - 1) {
 							//buffer_index++;
 							buffer[buffer_index] = compressed_data;
 							splitted_str_data[buffer_index] = str_index;
-							printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
+							//printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
 						}
 					}
 				}
@@ -409,36 +414,36 @@ int main() {
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b01) {
 							str_index++;
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b011) {
 							str_index++;
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b111) {
 							str_index++;
@@ -446,23 +451,23 @@ int main() {
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 						}
 						if (i == str_length - 1) {
 							//buffer_index++;
 							buffer[buffer_index] = compressed_data;
 							splitted_str_data[buffer_index] = str_index;
-							printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
+							//printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
 						}
 					}
 				}
@@ -474,23 +479,23 @@ int main() {
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b01) {
 							str_index++;
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b11) {
 							str_index++;
@@ -498,28 +503,28 @@ int main() {
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b010) {
 							str_index++;
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b110) {
 							str_index++;
@@ -527,23 +532,23 @@ int main() {
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 
 						}
 						if (i == str_length - 1) {
 							//buffer_index++;
 							buffer[buffer_index] = compressed_data;
 							splitted_str_data[buffer_index] = str_index;
-							printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
+							//printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
 						}
 					}
 				}
@@ -555,16 +560,16 @@ int main() {
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b101) {
 							str_index++;
@@ -572,16 +577,16 @@ int main() {
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b1100) {
 							str_index++;
@@ -589,42 +594,42 @@ int main() {
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b0111) {
 							str_index++;
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 
 						}
 						else if (bit_to_add == 0b1010) {
@@ -633,20 +638,20 @@ int main() {
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 
 						}
 						else if (bit_to_add == 0b1110) {
@@ -655,21 +660,21 @@ int main() {
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 
 						}
 						else if (bit_to_add == 0b0010) {
@@ -677,20 +682,20 @@ int main() {
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 
 						}
 						else if (bit_to_add == 0b1011) {
@@ -699,21 +704,21 @@ int main() {
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 
 						}
 						else if (bit_to_add == 0b0011) {
@@ -721,21 +726,21 @@ int main() {
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 
 						}
 						else if (bit_to_add == 0b1000) {			//codes[9]
@@ -744,19 +749,19 @@ int main() {
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 						}
 						///////////////////////////////////////////////////
 						
@@ -768,29 +773,29 @@ int main() {
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 			
 						}
 						
@@ -800,27 +805,27 @@ int main() {
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b00100) {			//codes[12]
 							str_index++;
@@ -828,27 +833,27 @@ int main() {
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b10100) {			//codes[13]
 							str_index++;
@@ -856,25 +861,25 @@ int main() {
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");	
+							//printf("Added Bit 1 to data stream!!\n");	
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");		
+							//printf("Added Bit 1 to data stream!!\n");		
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b010000) {			//codes[14]
 							str_index++;
@@ -882,32 +887,32 @@ int main() {
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b100110) {			//codes[15]
 							str_index++;
@@ -915,31 +920,31 @@ int main() {
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");					
+							//printf("Added Bit 1 to data stream!!\n");					
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 					
 						}
 						else if (bit_to_add == 0b100000) {			//codes[16]
@@ -948,31 +953,31 @@ int main() {
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");					
+							//printf("Added Bit 1 to data stream!!\n");					
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b000110) {			//codes[17]
 							str_index++;
@@ -980,31 +985,31 @@ int main() {
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");					
+							//printf("Added Bit 0 to data stream!!\n");					
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b000000) {			//codes[18]
 							str_index++;
@@ -1012,32 +1017,32 @@ int main() {
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 						}
 												
 						else if (bit_to_add == 0b110110) {			//codes[19]
@@ -1046,31 +1051,31 @@ int main() {
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b110000) {			//codes[20]
 							str_index++;
@@ -1078,31 +1083,31 @@ int main() {
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b0010110) {			//codes[21]
 							str_index++;
@@ -1110,36 +1115,36 @@ int main() {
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");	
+							//printf("Added Bit 0 to data stream!!\n");	
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b011010110) {			//codes[22]
 							str_index++;
@@ -1147,47 +1152,47 @@ int main() {
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b101010110) {			//codes[23]
 							str_index++;
@@ -1195,46 +1200,46 @@ int main() {
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");					
+							//printf("Added Bit 1 to data stream!!\n");					
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 					
 						}
 						else if (bit_to_add == 0b111010110) {			//codes[24]
@@ -1243,46 +1248,46 @@ int main() {
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 						}
 						else if (bit_to_add == 0b0001010110) {			//codes[25]
 							str_index++;
@@ -1290,59 +1295,59 @@ int main() {
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 							compressed_data <<= 1;
 							compressed_data += 1;
 							data_stream[index] = 1;
 							index++;
-							printf("Added Bit 1 to data stream!!\n");
+							//printf("Added Bit 1 to data stream!!\n");
 												
 							compressed_data <<= 1;
 							data_stream[index] = 0;
 							index++;
-							printf("Added Bit 0 to data stream!!\n");
+							//printf("Added Bit 0 to data stream!!\n");
 						}
 				
 						if (i == str_length - 1) {
 							//buffer_index++;
 							buffer[buffer_index] = compressed_data;
 							splitted_str_data[buffer_index] = str_index;
-							printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
+							//printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
 						}
 					}
 				}
@@ -1350,27 +1355,50 @@ int main() {
 		}
 	}
 
-    printf("\nCompressed Data: %d" , compressed_data);
-    printf("\nCompressed Data Binary: ");
+    //printf("\nCompressed Data: %d" , compressed_data);
+    //printf("\nCompressed Data Binary: ");
     for (i = 0; i < index; i++) {
-        printf("%d", data_stream[i]);
+        //printf("%d", data_stream[i]);
     }
-    printf("\nLength of Binary: %d", i);
-    printf("\n");
+    //printf("\nLength of Binary: %d", i);
+    //printf("\n");
 
     int flag = 1;
-    int input = 0;
-    while (flag) {
-        printf("Press '1' to Decompress...\n");
-        scanf("%d", &input);
-        if (input == 1) {
+    char *input = (char*)malloc(sizeof(input));
+	
+	gettimeofday(&stop, NULL);
+	double diff = stop.tv_usec - start.tv_usec;
+	double compTime = diff + (0.000001f * diff);
+	printf("\nCompression time using timeval: %0.4f microseconds\n", compTime);
+	//printf("Time in microseconds: %ld microseconds\n",
+    //        ((stop.tv_sec - start.tv_sec)*1000000L
+     //      +stop.tv_usec) - start.tv_usec
+    //      );
+	
+//	clock_t end = clock();
+	//double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+	//printf("\nTotal time to run compression:	%f seconds\n", time_spent);
+	
+	//clock_t beginDec = clock();
+	
+	printf("\nPress '1' to Decompress...\n");
+    while (flag) {        	
+        fgets (input, 100, stdin);
+		input[strcspn(input, "\n")] = ' ';
+        if (strcmp(input, "1 ") == 0) {
             flag = 0;
-        } 
-			
-    }                      //***********OPTIMIZED
-    char* decompressed_str = (char*)malloc(untouched_strlen+2);
+        } else if (strcmp(input, " ") == 0) {
+			printf("");
+		} else { printf("%sis invalid. Please type a '1'\n",input);
+		}
+	}                      //***********OPTIMIZED
+  
+    struct timeval startDec, stopDec;
+	gettimeofday(&startDec, NULL);
+	
+  char* decompressed_str = (char*)malloc(untouched_strlen+2);
     if(decompressed_str == NULL) {
-      printf("Memory allocation failed");
+      //printf("Memory allocation failed");
       return 0;
     }
     int pos = untouched_strlen-1;								//changed from untouched_strlen-1
@@ -1390,7 +1418,7 @@ int main() {
 			for (i = 0; i < buffer_index+1; i++) {
 				str_length = splitted_str_data[nodes];
 				compressed_data = buffer[nodes];
-				printf("\nXXXXXXXXXXXXXXXXXXXXXX	Str_length: %d, compressed_data: %d, current_buffer_index: %d\n", str_length, compressed_data, nodes);
+				//printf("\nXXXXXXXXXXXXXXXXXXXXXX	Str_length: %d, compressed_data: %d, current_buffer_index: %d\n", str_length, compressed_data, nodes);
 				for (j = 0; j < str_length; j++) {
 					if (compressed_data & 1) {
 						decompressed_str[pos] = alpha[1];
@@ -1412,7 +1440,7 @@ int main() {
 			for (i = 0; i < buffer_index + 1; i++) {
 				str_length = splitted_str_data[nodes];
 				compressed_data = buffer[nodes];
-				printf("\nXXXXXXXXXXXXXXXXXXXXXX	Str_length: %d, compressed_data: %d, current_buffer_index: %d\n", str_length, compressed_data, nodes);
+				//printf("\nXXXXXXXXXXXXXXXXXXXXXX	Str_length: %d, compressed_data: %d, current_buffer_index: %d\n", str_length, compressed_data, nodes);
 				for (j = 0; j < str_length; j++) {
 					if (compressed_data & 1) {
 						compressed_data >>= 1;
@@ -1440,7 +1468,7 @@ int main() {
 			for (i = 0; i < buffer_index + 1; i++) {
 				str_length = splitted_str_data[nodes];
 				compressed_data = buffer[nodes];
-				printf("\nXXXXXXXXXXXXXXXXXXXXXX	Str_length: %d, compressed_data: %d, current_buffer_index: %d\n", str_length, compressed_data, nodes);
+				//printf("\nXXXXXXXXXXXXXXXXXXXXXX	Str_length: %d, compressed_data: %d, current_buffer_index: %d\n", str_length, compressed_data, nodes);
 				for (j = 0; j < str_length; j++) {
 					if (compressed_data & 1) {
 						compressed_data >>= 1;
@@ -1479,7 +1507,7 @@ int main() {
 			for (i = 0; i < buffer_index + 1; i++) {
 				str_length = splitted_str_data[nodes];
 				compressed_data = buffer[nodes];
-				printf("\nXXXXXXXXXXXXXXXXXXXXXX	Str_length: %d, compressed_data: %d, current_buffer_index: %d\n", str_length, compressed_data, nodes);
+				//printf("\nXXXXXXXXXXXXXXXXXXXXXX	Str_length: %d, compressed_data: %d, current_buffer_index: %d\n", str_length, compressed_data, nodes);
 				for (j = 0; j < str_length; j++) {
 					if (compressed_data & 1) {
 						compressed_data >>= 1;
@@ -1522,7 +1550,7 @@ int main() {
 for (i = 0; i < buffer_index + 1; i++) {
     str_length = splitted_str_data[nodes];
     compressed_data = buffer[nodes];
-    printf("\nXXXXXXXXXXXXXXXXXXXXXX	Str_length: %d, compressed_data: %d, current_buffer_index: %d\n", str_length, compressed_data, nodes);
+    //printf("\nXXXXXXXXXXXXXXXXXXXXXX	Str_length: %d, compressed_data: %d, current_buffer_index: %d\n", str_length, compressed_data, nodes);
     for (j = 0; j < str_length; j++) {
         if (compressed_data & 1) { // 1
             compressed_data >>= 1;
@@ -1761,9 +1789,9 @@ for (i = 0; i < buffer_index + 1; i++) {
 }
 break;
     }
-	//printf("\nstrcmp value: %d\n", strcmp(str, decompressed_str));
+	////printf("\nstrcmp value: %d\n", strcmp(str, decompressed_str));
 	if (strcmp(str, decompressed_str) == 0) { 
-		printf("\nOriginal String:	%s\nLength: %d	\nOriginal Size: %d bits\nCompressed Size: %d bits\n", str, untouched_strlen, untouched_strlen*8, index);
+		printf("\nOriginal String:	%s\nLength: %d characters \nOriginal Size: %d bits\nCompressed Size: %d bits\n", str, untouched_strlen, untouched_strlen*8, index);
 		printf("Decompressed String:	%s\n", decompressed_str);
 	} else {
 		printf("\n/*************************************************************************************************/\nERROR: Original and decompressed strings not the same\nThe original string: %s \nThe decompressed string: %s\n", str, decompressed_str);
@@ -1779,8 +1807,16 @@ break;
     free(str);
     free(decompressed_str);
     free(data_stream);
-
+	
     //***********OPTIMIZED
+	gettimeofday(&stopDec, NULL);
+	double diffDec = stopDec.tv_usec - startDec.tv_usec;
+	double compTimeDec = diffDec + (0.000001f * diffDec);
+	printf("\nDecompression time using timeval: %0.4f microseconds\n", compTimeDec);
+	
+	//clock_t endDec = clock();
+	//double time_spent_dec = 1000*(double)(endDec - beginDec) / CLOCKS_PER_SEC;
+	//printf("\nTotal time to run compression:	%fms seconds\n", time_spent_dec);
 
     return 0;
 }
