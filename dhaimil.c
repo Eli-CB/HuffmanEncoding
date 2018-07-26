@@ -1560,7 +1560,7 @@ int main() {
 									pos--;
 								}
 							}
-						}
+						} // CORRECT UP TO HERE
 						else { // 01
 							compressed_data >>= 1;
 							if (compressed_data & 1) { // 101
@@ -1574,7 +1574,7 @@ int main() {
 
 
 						}
-					}
+					} // // CORRECT UP TO HERE
 					else // 0
 					{
 						compressed_data >>= 1;
@@ -1606,7 +1606,7 @@ int main() {
 													} else { // 001010110
 														compressed_data >>= 1;
 														if (compressed_data & 1) { // 1001010110
-															compressed_data >>= 1;
+															//compressed_data >>= 1;
 														} else { // 0001010110
 															decompressed_str[pos] = alpha[25];
 															pos--;
