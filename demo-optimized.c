@@ -12,27 +12,15 @@ int main() {
 	//  clock_t begin = clock();	
 	FILE *myfile1;
 	myfile1 = fopen("Performace.txt", "w");
-	fprintf(myfile1, "Encoding	Decoding\n");
+	fputs("Encoding	Decoding\n", myfile1);
 	fclose(myfile1);
 
 
 	int sorted_freq[26] = { 0 };
 	char* str = (char*)malloc(1024);
-
-	if (str == NULL) {
-		//printf("Memory allocation failed");
-		return 0;
-	}
 	int* buffer = (int*)malloc(1024);
-	if (buffer == NULL) {
-		//printf("Memory allocation failed");
-		return 0;
-	}
 	int* splitted_str_data = (int*)malloc(1024);
-	if (splitted_str_data == NULL) {
-		//printf("Memory allocation failed");
-		return 0;
-	}
+
 	//126 bits: asasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaassssa
 
 	int i, j, k = 0;
@@ -1018,7 +1006,7 @@ int main() {
 	struct timeval startDec, stopDec;
 	gettimeofday(&startDec, NULL);
 
-	char* decompressed_str = (char*)malloc(1024);
+	char* decompressed_str = (char*)malloc((untouched_strlen + 1) * sizeof *decompressed_str);
 
 	int pos = untouched_strlen - 1;								//changed from untouched_strlen-1
 	int nodes = buffer_index;
@@ -1426,12 +1414,6 @@ int main() {
 	printf("\nOriginal String:	%s\nLength: %d characters \nOriginal Size: %d bits\nCompressed Size: %d bits\n", str, untouched_strlen, untouched_strlen * 8, index);
 	printf("Decompressed String:	%s\n", decompressed_str);
 
-	//free memory...
-	//str = NULL;
-	//decompressed_str = NULL;
-	//buffer = NULL;
-	//splitted_str_data = NULL;
-
 
 	//***********OPTIMIZED
 	gettimeofday(&stopDec, NULL);
@@ -1441,16 +1423,16 @@ int main() {
 
 	printf("\nTotal time: %0.4f microseconds\n", compTime + compTimeDec);
 	FILE *myfile2;
-	myfile2 = fopen("Performace.txt", "a+");
+	myfile2 = fopen("Performance.txt", "a+");
 	fprintf(myfile2, "%0.4f	%0.4f\n", compTime, compTimeDec);
 	fclose(myfile2);
 
 	//clock_t endDec = clock();
 	//double time_spent_dec = 1000*(double)(endDec - beginDec) / CLOCKS_PER_SEC;
 	//printf("\nTotal time to run compression:	%fms seconds\n", time_spent_dec);
-	free(str);
 	free(buffer);
 	free(splitted_str_data);
+	free(str);
 	free(decompressed_str);
 
 	return 0;
