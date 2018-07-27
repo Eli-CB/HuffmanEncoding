@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <string.h>
 #include <stdint.h>
-#include <limits.h>
 #include <stdbool.h>
 #include <time.h>
 #include <sys/time.h>
@@ -173,9 +171,9 @@ void optimal_encoding(int codes[26], int number_of_letters) {
 
 bool safe_add(int compressed_data, int bit) {
   //printf("compressed_data = %d\n", compressed_data);
-    if (compressed_data >= INT_MAX>>bit) {
+    if (compressed_data >= 2147483647>>bit) {
         //printf("\n************HANDLE OVERFLOW************\n");
-		//printf("\nCompressed Number XXXXXXX : %d	INT_MAX: %d	INT_MAX>>bit: %d\n",compressed_data, INT_MAX, INT_MAX >> bit);
+		//printf("\nCompressed Number XXXXXXX : %d	2147483647: %d	2147483647>>bit: %d\n",compressed_data, 2147483647, 2147483647 >> bit);
         return false;
     }
     return true;
@@ -277,14 +275,14 @@ int main() {
     int temp = number_of_letters;
     int str_length = strlen(str);
 	int untouched_strlen = str_length;
-	printf("LETTER   | FREQUENCY");	
+	//printf("LETTER   | FREQUENCY");	
     // While there are still letters
     while (temp > 0) {
         for (i = 0; i < 26; i++) {
             // Only checks for letters that were typed
             if (unsorted_letterFreq[i] != 0) {
                 if (sorted_freq[k] == unsorted_letterFreq[i]) {
-                    printf("\nLetter %c : %d", letters[i], unsorted_letterFreq[i]);
+            //        printf("\nLetter %c : %d", letters[i], unsorted_letterFreq[i]);
                     sorted_freq[k] = 0;
                     alpha[k] = letters[i];
                     temp--;

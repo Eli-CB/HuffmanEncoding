@@ -8,6 +8,7 @@
 #include <time.h>
 #include <sys/time.h>
 
+
 char alpha[26] = { 0 };
 char letters[26] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
 
@@ -147,9 +148,17 @@ bool safe_add(int compressed_data, int bit) {
 
 int main() {                                
 //  clock_t begin = clock();	
+	FILE *myfile1;
+	myfile1 = fopen("Performance.txt", "w");
+	fprintf(myfile1, "Encoding	Decoding\n");
+	fclose(myfile1);
+
+	int counter = 0;
+	while (counter < 5000) {
+		//  clock_t begin = clock();	
   
   int sorted_freq[26] = { 0 };
-  char str[200]; 
+  char *str; 
   
 
   int buffer[400]; 
@@ -167,8 +176,9 @@ int main() {
 
    // do {
         printf("Enter the alphabet letters to encode: ");
+			//scanf("%s", str);
+			str = "abcdefghijklmnopqrstuvwxyzalmdoqiwetoigpdlfkjgjbmcnxzjiqoep";
 
-        scanf("%s", str);
   //  } while(!checkValid(&str));
 	struct timeval start, stop;
     gettimeofday(&start, NULL);
@@ -1250,7 +1260,7 @@ int main() {
 	printf("\n\nCompression time: %0.4f microseconds\n", compTime);
 
 	printf("\nPress '1' to Decompress...\n");
-    while (flag) {        	
+   /* while (flag) {        	
         fgets (input, 100, stdin);
 		input[strcspn(input, "\n")] = ' ';
         if (strcmp(input, "1 ") == 0) {
@@ -1259,7 +1269,7 @@ int main() {
 			printf("");
 		} else { printf("%sis invalid. Please type a '1'\n",input);
 		}
-	}                   
+	}                   */
   
     struct timeval startDec, stopDec;
 	gettimeofday(&startDec, NULL);
@@ -1663,6 +1673,23 @@ for (i = 0; i < buffer_index + 1; i++) {
 	double compTimeDec = diffDec + (0.000001f * diffDec);
 	printf("\nDecompression time: %0.4f microseconds\n", compTimeDec);
 	printf("\nTotal time: %0.4f microseconds\n", compTime + compTimeDec);
+		if (counter != 0){
+			FILE *myfile2;
+			myfile2 = fopen("Performance.txt", "a+");
+			fprintf(myfile2, "%0.4f	%0.4f\n", compTime, compTimeDec);
+			fclose(myfile2);
+		}
+		counter++;
+		
+		
 
-    return 0;
+		//clock_t endDec = clock();
+		//double time_spent_dec = 1000*(double)(endDec - beginDec) / CLOCKS_PER_SEC;
+		//printf("\nTotal time to run compression:	%fms seconds\n", time_spent_dec);
+
+		
+		
+	}
+	return 0;
+  
 }
