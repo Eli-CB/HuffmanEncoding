@@ -42,7 +42,6 @@ int main() {
 	int compressed_data = 1;           //***********OPTIMIZED
 	bool notValid = true;
 
-	//unsigned long int not supported by 32 bit system
 
 	do {
 		notValid = true;
@@ -1019,7 +1018,7 @@ int main() {
 	struct timeval startDec, stopDec;
 	gettimeofday(&startDec, NULL);
 
-	char* decompressed_str = (char*)malloc(untouched_strlen * sizeof(*decompressed_str));
+	char* decompressed_str = (char*)malloc(1024);
 
 	int pos = untouched_strlen - 1;								//changed from untouched_strlen-1
 	int nodes = buffer_index;
@@ -1453,6 +1452,7 @@ int main() {
 	free(buffer);
 	free(splitted_str_data);
 	free(decompressed_str);
+
 	return 0;
 
 }
