@@ -1411,7 +1411,7 @@ int main() {
 		break;
 	}
 
-	printf("\nOriginal String:	%s\nLength: %d characters \nOriginal Size: %d bits\nCompressed Size: %d bits\n", str, untouched_strlen, untouched_strlen * 8, index);
+	printf("\nOriginal String:	%s\nLength: %d characters \nOriginal Size: %d bits\nCompressed \n", str, untouched_strlen, untouched_strlen * 8);
 	printf("Decompressed String:	%s\n", decompressed_str);
 
 
