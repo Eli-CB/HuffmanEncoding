@@ -1,15 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <string.h>
 #include <stdint.h>
-#include <limits.h>
 #include <stdbool.h>
 #include <time.h>
 #include <sys/time.h>
-
-char alpha[26] = { 0 };
-char letters[26] = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
 
 void insertionSort(int freq[26]) {
     int i,j,a = 0;
@@ -25,88 +20,123 @@ void insertionSort(int freq[26]) {
 }
 
 // Gets the frequency of each letter entered: enables optimal encodings
-void getFrequency(char str[50], int freq[26]){
-  int i = 0;
-  for(i = 0; str[i] != '\0'; i++){
-    if(str[i] =='a'){
-      freq[0]++;
-    }else if(str[i] =='b'){
-      freq[1]++;
-    }else if(str[i] =='c'){
-      freq[2]++;
-    }else if(str[i] =='d'){
-      freq[3]++;
-    }else if(str[i] =='e'){
-      freq[4]++;
-    }else if(str[i] =='f'){
-      freq[5]++;
-    }else if(str[i] =='g'){
-      freq[6]++;
-    }else if(str[i] =='h'){
-      freq[7]++;
-    }else if(str[i] =='i'){
-      freq[8]++;
-    }else if(str[i] =='j'){
-      freq[9]++;
-    }else if(str[i] =='k'){
-      freq[10]++;
-    }else if(str[i] =='l'){
-      freq[11]++;
-    }else if(str[i] =='m'){
-      freq[12]++;
-    }else if(str[i] =='n'){
-      freq[13]++;
-    }else if(str[i] =='o'){
-      freq[14]++;
-    }else if(str[i] =='p'){
-      freq[15]++;
-    }else if(str[i] =='q'){
-      freq[16]++;
-    }else if(str[i] =='r'){
-      freq[17]++;
-    }else if(str[i] =='s'){
-      freq[18]++;
-    }else if(str[i] =='t'){
-      freq[19]++;
-    }else if(str[i] =='u'){
-      freq[20]++;
-    }else if(str[i] =='v'){
-      freq[21]++;
-    }else if(str[i] =='w'){
-      freq[22]++;
-    }else if(str[i] =='x'){
-      freq[23]++;
-    }else if(str[i] =='y'){
-      freq[24]++;
-    }else if(str[i] =='z'){
-      freq[25]++;
+void getFrequency(char* str, int freq[26]) { //ADDED a "*" for char str :)
+    int i = 0;
+    while(str[i] != '\0') {
+        switch(str[i]) {
+        case 'a':
+            freq[0]++;
+            break;
+        case 'b':
+            freq[1]++;
+            break;
+        case 'c':
+            freq[2]++;
+            break;
+        case 'd':
+            freq[3]++;
+            break;
+        case 'e':
+            freq[4]++;
+            break;
+        case 'f':
+            freq[5]++;
+            break;
+        case 'g':
+            freq[6]++;
+            break;
+        case 'h':
+            freq[7]++;
+            break;
+        case 'i':
+            freq[8]++;
+            break;
+        case 'j':
+            freq[9]++;
+            break;
+        case 'k':
+            freq[10]++;
+            break;
+        case 'l':
+            freq[11]++;
+            break;
+        case 'm':
+            freq[12]++;
+            break;
+        case 'n':
+            freq[13]++;
+            break;
+        case 'o':
+            freq[14]++;
+            break;
+        case 'p':
+            freq[15]++;
+            break;
+        case 'q':
+            freq[16]++;
+            break;
+        case 'r':
+            freq[17]++;
+            break;
+        case 's':
+            freq[18]++;
+            break;
+        case 't':
+            freq[19]++;
+            break;
+        case 'u':
+            freq[20]++;
+            break;
+        case 'v':
+            freq[21]++;
+            break;
+        case 'w':
+            freq[22]++;
+            break;
+        case 'x':
+            freq[23]++;
+            break;
+        case 'y':
+            freq[24]++;
+            break;
+        case 'z':
+            freq[25]++;
+            break;
+        }
+        i++;
     }
-  }
-  return;
+    return;
 }
 
-void optimal_encoding(int codes[26], int number_of_letters){
-  if(number_of_letters == 1){
-    codes[0] = 0b0;
-  }else if (number_of_letters == 2){
-    codes[0] = 0b0;
-    codes[1] = 0b1;
-  }else if (number_of_letters == 3){
-    codes[0] = 0b0;
-    codes[1] = 0b01;
-    codes[2] = 0b11;
-  }else if(number_of_letters == 4){
-    codes[0] = 0b00;
-    codes[1] = 0b01;
-    codes[2] = 0b10;
-    codes[3] = 0b11;
-  }else if(number_of_letters == 5){
-    codes[0] = 0b00;
-    codes[1] = 0b01;
-    codes[2] = 0b11;
-    codes[3] = 0b010;
-    codes[4] = 0b110;
-  }else if (number_of_letters > 5){ 
+//ADDED SWITCH STATEMENT OPTIMIZED
+void optimal_encoding(int codes[26], int number_of_letters) {
+    switch(number_of_letters) {
+    case 1:
+        codes[0] = 0b0;
+        break;
+    case 2:
+        codes[0] = 0b0;
+        codes[1] = 0b1;
+        break;
+    case 3:
+        codes[0] = 0b0;
+        codes[1] = 0b01;
+        codes[2] = 0b11;
+        break;
+    case 4:
+        codes[0] = 0b0;
+        codes[1] = 0b01;
+        codes[2] = 0b011;
+        codes[3] = 0b111;
+        break;
+    case 5:
+        codes[0] = 0b00;
+        codes[1] = 0b01;
+        codes[2] = 0b11;
+        codes[3] = 0b010;
+        codes[4] = 0b110;
+        break;
+    default:
         codes[0] = 0b001;
 		codes[1] = 0b101;
         codes[2] = 0b1100;
@@ -133,18 +163,22 @@ void optimal_encoding(int codes[26], int number_of_letters){
 		codes[23] = 0b101010110;
         codes[24] = 0b111010110;
 		codes[25] = 0b0001010110;
-	}
-}
+	
+        break;
 
+    }
+}
 
 bool safe_add(int compressed_data, int bit) {
   //printf("compressed_data = %d\n", compressed_data);
-    if (compressed_data >= INT_MAX>>bit) {
+    if (compressed_data >= 2147483647>>bit) {
+        //printf("\n************HANDLE OVERFLOW************\n");
+		//printf("\nCompressed Number XXXXXXX : %d	2147483647: %d	2147483647>>bit: %d\n",compressed_data, 2147483647, 2147483647 >> bit);
         return false;
     }
     return true;
 }
-/*
+
 bool checkValid(char **input) {
     int i;
     bool notValid = true;
@@ -156,28 +190,28 @@ bool checkValid(char **input) {
         }
     }
     return notValid;
-}*/
+}
 
 int main() {                                
 //  clock_t begin = clock();	
   
   int sorted_freq[26] = { 0 };
-  char str[200]; 
+  char* str = (char*)malloc(1024); 
   
- // if(str == NULL) {                           
- //   //printf("Memory allocation failed");
- //   return 0;
- // }
-  int buffer[400]; 
- // if(buffer == NULL) {                           
+  if(str == NULL) {                           
     //printf("Memory allocation failed");
-  //  return 0;
-  //}	
-  int splitted_str_data[200];     
- // if(splitted_str_data == NULL) {                           
-  //  //printf("Memory allocation failed");
-  //  return 0;
- // }
+    return 0;
+  }
+  int* buffer = (int*)malloc(1024); 
+  if(buffer == NULL) {                           
+    //printf("Memory allocation failed");
+    return 0;
+  }	
+  int* splitted_str_data = (int*)malloc(1024);     
+  if(splitted_str_data == NULL) {                           
+    //printf("Memory allocation failed");
+    return 0;
+  }
 	//126 bits: asasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaassssa
 
   int i, j, k = 0;
@@ -187,11 +221,11 @@ int main() {
 
     //unsigned long int not supported by 32 bit system
 
-   // do {
+    do {
         printf("Enter the alphabet letters to encode: ");
 
         scanf("%s", str);
-  //  } while(!checkValid(&str));
+    } while(!checkValid(&str));
 	struct timeval start, stop;
     gettimeofday(&start, NULL);
     getFrequency(str, sorted_freq);
@@ -208,7 +242,7 @@ int main() {
       //  printf("%d", unsorted_letterFreq[i]);
     }
 
-	/*int bits_for_safe_shifting = number_of_letters;		//ELISMAJOR
+	int bits_for_safe_shifting = number_of_letters;		//ELISMAJOR
 	if (number_of_letters == 1) {
 		bits_for_safe_shifting++;
 	}
@@ -224,7 +258,7 @@ int main() {
 	else {
 		bits_for_safe_shifting = 10;
 	}
-*/
+
     //freq_sorted is now sorted
     insertionSort(sorted_freq);
 
@@ -241,14 +275,14 @@ int main() {
     int temp = number_of_letters;
     int str_length = strlen(str);
 	int untouched_strlen = str_length;
-	printf("LETTER   | FREQUENCY");	
+	//printf("LETTER   | FREQUENCY");	
     // While there are still letters
     while (temp > 0) {
         for (i = 0; i < 26; i++) {
             // Only checks for letters that were typed
             if (unsorted_letterFreq[i] != 0) {
                 if (sorted_freq[k] == unsorted_letterFreq[i]) {
-                    printf("\nLetter %c : %d", letters[i], unsorted_letterFreq[i]);
+            //        printf("\nLetter %c : %d", letters[i], unsorted_letterFreq[i]);
                     sorted_freq[k] = 0;
                     alpha[k] = letters[i];
                     temp--;
@@ -264,15 +298,15 @@ int main() {
 
     int bit_to_add = 0;
     int index = 1;
-	int data_stream[300];
-//	if (data_stream == NULL) {                           
-	//	//printf("Memory allocation failed");
-	//	return 0;
-//	}
+	int* data_stream = (int*)malloc((strlen(str)*bits_for_safe_shifting)+1);
+	if (data_stream == NULL) {                           
+		//printf("Memory allocation failed");
+		return 0;
+	}
     //printf("\nStart Bit '1' is added to the data stream\n");
     data_stream[0] = compressed_data;
 
-	for (i = 0; i < str_length; i++) {
+		for (i = 0; i < str_length; i++) {
 		if (!safe_add(compressed_data, 10)) {
 			//while (1);
 			i--;
@@ -287,7 +321,8 @@ int main() {
 		else {
 			//printf("\nLetter: %c\n", str[i]);
 			for (j = 0; j < number_of_letters; j++) {
-				if (number_of_letters == 1) {
+				switch (number_of_letters) {
+				case 1:	 {
 					if (str[i] == alpha[j]) {
 						//bit_to_add = codes[j];					
 						str_index++;
@@ -303,9 +338,9 @@ int main() {
 						//printf("Added Bit %d to data stream!!\n", bit_to_add);
 					
 					}
-
+					break;
 				}
-				else if (number_of_letters == 2) {
+				 case 2: {
 					if (str[i] == alpha[j]) {
 						//while (1);
 						bit_to_add = codes[j];
@@ -325,8 +360,9 @@ int main() {
 
 
 					}
+					break;
 				}
-				else if (number_of_letters == 3) {
+				case 3: {
 					if (str[i] == alpha[j]) {
 						bit_to_add = codes[j];
 						if (bit_to_add == 0b0) {
@@ -369,8 +405,9 @@ int main() {
 							//printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
 						}
 					}
+					break;
 				}
-				else if (number_of_letters == 4) {
+				case 4: {
 					if (str[i] == alpha[j]) {
 						bit_to_add = codes[j];
 						if (bit_to_add == 0b0) {
@@ -434,8 +471,9 @@ int main() {
 							//printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
 						}
 					}
+					break;
 				}
-				else if (number_of_letters == 5) {
+				case 5: {
 					if (str[i] == alpha[j]) {
 						bit_to_add = codes[j];
 						if (bit_to_add == 0b00) {
@@ -515,8 +553,9 @@ int main() {
 							//printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
 						}
 					}
+					break;
 				}
-				else if (number_of_letters > 5) {
+				default: {
 					if (str[i] == alpha[j]) {
 						bit_to_add = codes[j];
 						if (bit_to_add == 0b001) {
@@ -1314,10 +1353,13 @@ int main() {
 							//printf("\nXXXXXXXXXXXXXXXXXXXXXX	Encoded Data: %d, buffer_index: %d ,splitted_str_data[buffer_index]: %d\n", buffer[buffer_index], buffer_index, splitted_str_data[buffer_index]);
 						}
 					}
+					break;
 				}
 			}
 		}
+			
 	}
+}
 
     //printf("\nCompressed Data: %d" , compressed_data);
     //printf("\nCompressed Data Binary: ");
@@ -1328,7 +1370,7 @@ int main() {
     //printf("\n");
 
     int flag = 1;
-    char input[300];
+    char *input = (char*)malloc(sizeof(input));
 	
 	gettimeofday(&stop, NULL);
 	double diff = stop.tv_usec - start.tv_usec;
@@ -1360,15 +1402,15 @@ int main() {
     struct timeval startDec, stopDec;
 	gettimeofday(&startDec, NULL);
 	
-  char decompressed_str[400];
-    //if(decompressed_str == NULL) {
- //     //printf("Memory allocation failed");
-   //   return 0;
-  //  }
+  char* decompressed_str = (char*)malloc(untouched_strlen+2);
+    if(decompressed_str == NULL) {
+      //printf("Memory allocation failed");
+      return 0;
+    }
     int pos = untouched_strlen-1;								//changed from untouched_strlen-1
 	int nodes = buffer_index;
-                         //***********OPTIMIZED
-		if (number_of_letters == 1) {                                           //Switch statements faster than if else
+    switch (number_of_letters) {                          //***********OPTIMIZED
+		case 1 :                                            //Switch statements faster than if else
 			for (i = 0; i < buffer_index + 1; i++) {
 				for (j = 0; j < str_length; j++) {
 					decompressed_str[pos] = alpha[0];
@@ -1377,8 +1419,8 @@ int main() {
 				}
 				nodes--;
 			}
-		}
-		if (number_of_letters == 2) {
+			break;
+		case 2 :
 			for (i = 0; i < buffer_index+1; i++) {
 				str_length = splitted_str_data[nodes];
 				compressed_data = buffer[nodes];
@@ -1398,9 +1440,9 @@ int main() {
 				}
 				nodes--;
 			}
-	}
+			break;
 
-	if (number_of_letters == 3) {
+		case 3 :
 			for (i = 0; i < buffer_index + 1; i++) {
 				str_length = splitted_str_data[nodes];
 				compressed_data = buffer[nodes];
@@ -1426,9 +1468,9 @@ int main() {
 				}
 				nodes--;
 			}
-	}
+			break;
 
-		if (number_of_letters == 4) {
+		case 4 :
 			for (i = 0; i < buffer_index + 1; i++) {
 				str_length = splitted_str_data[nodes];
 				compressed_data = buffer[nodes];
@@ -1465,9 +1507,9 @@ int main() {
 				}
 				nodes--;
 			}
-	}
+			break;
 
-		if (number_of_letters == 5) {
+		case 5 :
 			for (i = 0; i < buffer_index + 1; i++) {
 				str_length = splitted_str_data[nodes];
 				compressed_data = buffer[nodes];
@@ -1508,9 +1550,9 @@ int main() {
 				}
 				nodes--;
 			}
-	}
+			break;
 
-		if (number_of_letters > 5) {
+		default:
 for (i = 0; i < buffer_index + 1; i++) {
     str_length = splitted_str_data[nodes];
     compressed_data = buffer[nodes];
@@ -1751,8 +1793,8 @@ for (i = 0; i < buffer_index + 1; i++) {
     }
     nodes--;
 }
-	}
-    
+break;
+    }
 	////printf("\nstrcmp value: %d\n", strcmp(str, decompressed_str));
 	if (strcmp(str, decompressed_str) == 0) { 
 		printf("\nOriginal String:	%s\nLength: %d characters \nOriginal Size: %d bits\nCompressed Size: %d bits\n", str, untouched_strlen, untouched_strlen*8, index);
@@ -1761,16 +1803,16 @@ for (i = 0; i < buffer_index + 1; i++) {
 		printf("\n/*************************************************************************************************/\nERROR: Original and decompressed strings not the same\nThe original string: %s \nThe decompressed string: %s\n", str, decompressed_str);
 	}
     //free memory...
-  //  str = NULL;
- //   decompressed_str = NULL;
- //   buffer = NULL;
-  //  splitted_str_data = NULL;
-  //  data_stream = NULL;
-  //  free(splitted_str_data);
-  //  free(buffer);
-    //free(str);
-   // free(decompressed_str);
-   // free(data_stream);
+    str = NULL;
+    decompressed_str = NULL;
+    buffer = NULL;
+    splitted_str_data = NULL;
+    data_stream = NULL;
+    free(splitted_str_data);
+    free(buffer);
+    free(str);
+    free(decompressed_str);
+    free(data_stream);
 	
     //***********OPTIMIZED
 	gettimeofday(&stopDec, NULL);

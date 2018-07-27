@@ -218,7 +218,7 @@ int main() {
 
     int bit_to_add = 0;
     int index = 1;
-	int data_stream[300];
+	int data_stream[600];
     data_stream[0] = compressed_data;
 
 	for (i = 0; i < str_length; i++) {

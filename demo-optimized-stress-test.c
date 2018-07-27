@@ -4,37 +4,19 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <sys/time.h>
-
-int main() {                                
-//  clock_t begin = clock();	
-	FILE *myfile1;
-	myfile1 = fopen("Performance.txt", "w");
-	fprintf(myfile1, "Encoding	Decoding\n");
-	fclose(myfile1);
-
-	int counter = 0;
-	while (counter < 5000) {
-		int sorted_freq[26] = { 0 };
-		char* str = (char*)malloc(1024);
+int huffman() {
+	int sorted_freq[26] = { 0 };
+		char* str = (char*)malloc(255);
 
 		if (str == NULL) {
 			//printf("Memory allocation failed");
 			return 0;
 		}
-		int* buffer = (int*)malloc(1024);
-		if (buffer == NULL) {
-			//printf("Memory allocation failed");
-			return 0;
-		}
-		int* splitted_str_data = (int*)malloc(1024);
-		if (splitted_str_data == NULL) {
-			//printf("Memory allocation failed");
-			return 0;
-		}
+
 		//126 bits: asasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaasasassasaassssa
 
-		int i, j, k = 0;
-		int a = 0;
+		int i,j, a;
+		int k = 0;
 		int buffer_index = 0;
 		int str_index = 0;
 		int compressed_data = 1;           //***********OPTIMIZED
@@ -42,25 +24,35 @@ int main() {
 
 		//unsigned long int not supported by 32 bit system
 
-		do {
-			notValid = true;
+	//	do {
+		//	notValid = true;
 			printf("Enter the alphabet letters to encode: ");
 
 			//scanf("%s", str);
 			str = "abcdefghijklmnopqrstuvwxyzalmdoqiwetoigpdlfkjgjbmcnxzjiqoep";
 			//Check Input for Valid string 
 			int len = strlen(str);
-			for (i = 0; i < len; i++) {
+			/*for (i = 0; i < len; i++) {
 				if ((str)[i] <= 96 || (str)[i] >= 123) {
 					printf("%c isn't a valid input!\n", (str)[i]);
 					notValid = false;
 				}
-			}
-		} while (!notValid);
-		struct timeval start, stop;
-		gettimeofday(&start, NULL);
+			}*/
+	//	} while (!notValid);
+		
 		//getFrequency(str, sorted_freq);
-
+		int* buffer = (int*)malloc(len);
+		if (buffer == NULL) {
+			//printf("Memory allocation failed");
+			return 0;
+		}
+		int* splitted_str_data = (int*)malloc(len);
+		if (splitted_str_data == NULL) {
+			//printf("Memory allocation failed");
+			return 0;
+		}
+		
+			
 		i = 0;
 		while (str[i] != '\0') {
 			switch (str[i]) {
@@ -263,7 +255,6 @@ int main() {
 
 		//freq_sorted is now sorted
 		//insertionSort(sorted_freq);
-		i, j, a = 0;
 		for (i = 0; i < 26; ++i) {
 			for (j = i + 1; j < 26; ++j) {
 				if (sorted_freq[i] < sorted_freq[j]) {
@@ -274,12 +265,6 @@ int main() {
 			}
 		}
 
-		////printf("\nAfter sorted: ");
-		for (i = 0; i < 26; i++) {
-			if (sorted_freq[i] != 0) {
-				/////printf("%d", sorted_freq[i]);
-			}
-		}
 
 		// 'alpha' will be set to the used letters, 'letters' is a list of all the letters
 		char alpha[26] = { 0 };
@@ -1433,12 +1418,8 @@ int main() {
 		}
 
 		int flag = 1;
-		char *input = (char*)malloc(sizeof(input));
+	//	char *input = (char*)malloc(sizeof(input));
 
-		gettimeofday(&stop, NULL);
-		double diff = stop.tv_usec - start.tv_usec;
-		double compTime = diff + (0.000001f * diff);
-		printf("\n\nCompression time: %0.4f microseconds\n", compTime);
 		//printf("Time in microseconds: %ld microseconds\n",
 		//        ((stop.tv_sec - start.tv_sec)*1000000L
 		//      +stop.tv_usec) - start.tv_usec
@@ -1465,8 +1446,6 @@ int main() {
 			}
 		}*/                      //***********OPTIMIZED
 
-		struct timeval startDec, stopDec;
-		gettimeofday(&startDec, NULL);
 
 		char* decompressed_str = (char*)malloc(untouched_strlen + 2);
 		if (decompressed_str == NULL) {
@@ -1896,18 +1875,7 @@ int main() {
 		free(data_stream);
 
 		//***********OPTIMIZED
-		gettimeofday(&stopDec, NULL);
-		double diffDec = stopDec.tv_usec - startDec.tv_usec;
-		double compTimeDec = diffDec + (0.000001f * diffDec);
-		printf("\nDecompression time: %0.4f microseconds\n", compTimeDec);
-		printf("\nTotal time: %0.4f microseconds\n", compTime + compTimeDec);
-		if (counter != 0){
-			FILE *myfile2;
-			myfile2 = fopen("Performance.txt", "a+");
-			fprintf(myfile2, "%0.4f	%0.4f\n", compTime, compTimeDec);
-			fclose(myfile2);
-		}
-		counter++;
+	
 		
 		
 
@@ -1915,8 +1883,32 @@ int main() {
 		//double time_spent_dec = 1000*(double)(endDec - beginDec) / CLOCKS_PER_SEC;
 		//printf("\nTotal time to run compression:	%fms seconds\n", time_spent_dec);
 
+		return 0;
 		
-		
+}
+int main() {                                
+//  clock_t begin = clock();	
+	FILE *myfile1;
+	myfile1 = fopen("Performance.txt", "w");
+	fprintf(myfile1, "Encoding	Decoding\n");
+	fclose(myfile1);
+
+	int counter = 0;
+	while (counter < 10) {
+		struct timeval start, stop;
+		gettimeofday(&start, NULL);
+		huffman();
+		gettimeofday(&stop, NULL);
+		double diffDec = stop.tv_usec - start.tv_usec;
+		double compTime = diffDec + (0.000001f * diffDec);
+		printf("\nTotal time: %0.4f microseconds\n", compTime);
+		if (counter != 0){
+			FILE *myfile2;
+			myfile2 = fopen("Performance.txt", "a+");
+			fprintf(myfile2, "%0.4f\n", compTime);
+			fclose(myfile2);
+		}
+		counter++;
 	}
 	return 0;
   

@@ -25,6 +25,14 @@ void insertionSort(int freq[26]) {
     }
 }
 
+bool safe_add(int compressed_data, int bit) {
+  //printf("compressed_data = %d\n", compressed_data);
+    if (compressed_data >= INT_MAX>>bit) {
+        return false;
+    }
+    return true;
+}
+
 // Gets the frequency of each letter entered: enables optimal encodings
 void getFrequency(char str[50], int freq[26]){
   int i = 0;
@@ -137,27 +145,8 @@ void optimal_encoding(int codes[26], int number_of_letters){
 	}
 }
 
-
-bool safe_add(int compressed_data, int bit) {
-  //printf("compressed_data = %d\n", compressed_data);
-    if (compressed_data >= INT_MAX>>bit) {
-        return false;
-    }
-    return true;
-}
-
-int main() {                                
-//  clock_t begin = clock();	
-	FILE *myfile1;
-	myfile1 = fopen("Performance.txt", "w");
-	fprintf(myfile1, "Encoding	Decoding\n");
-	fclose(myfile1);
-
-	int counter = 0;
-	while (counter < 5000) {
-		//  clock_t begin = clock();	
-  
-  int sorted_freq[26] = { 0 };
+int huffman() {
+int sorted_freq[26] = { 0 };
   char *str; 
   
 
@@ -180,8 +169,7 @@ int main() {
 			str = "abcdefghijklmnopqrstuvwxyzalmdoqiwetoigpdlfkjgjbmcnxzjiqoep";
 
   //  } while(!checkValid(&str));
-	struct timeval start, stop;
-    gettimeofday(&start, NULL);
+	
     getFrequency(str, sorted_freq);
 
     int unsorted_letterFreq[26] = { 0 };
@@ -1254,10 +1242,6 @@ int main() {
     int flag = 1;
     char input[300];
 	
-	gettimeofday(&stop, NULL);
-	double diff = stop.tv_usec - start.tv_usec;
-	double compTime = diff + (0.000001f * diff);
-	printf("\n\nCompression time: %0.4f microseconds\n", compTime);
 
 	printf("\nPress '1' to Decompress...\n");
    /* while (flag) {        	
@@ -1271,8 +1255,7 @@ int main() {
 		}
 	}                   */
   
-    struct timeval startDec, stopDec;
-	gettimeofday(&startDec, NULL);
+   
 	
     char decompressed_str[400];
     int pos = untouched_strlen-1;								//changed from untouched_strlen-1
@@ -1668,18 +1651,7 @@ for (i = 0; i < buffer_index + 1; i++) {
 		printf("\n/*************************************************************************************************/\nERROR: Original and decompressed strings not the same\nThe original string: %s \nThe decompressed string: %s\n", str, decompressed_str);
 	}
 
-	gettimeofday(&stopDec, NULL);
-	double diffDec = stopDec.tv_usec - startDec.tv_usec;
-	double compTimeDec = diffDec + (0.000001f * diffDec);
-	printf("\nDecompression time: %0.4f microseconds\n", compTimeDec);
-	printf("\nTotal time: %0.4f microseconds\n", compTime + compTimeDec);
-		if (counter != 0){
-			FILE *myfile2;
-			myfile2 = fopen("Performance.txt", "a+");
-			fprintf(myfile2, "%0.4f	%0.4f\n", compTime, compTimeDec);
-			fclose(myfile2);
-		}
-		counter++;
+	
 		
 		
 
@@ -1689,6 +1661,34 @@ for (i = 0; i < buffer_index + 1; i++) {
 
 		
 		
+	
+	return 0;
+}
+
+
+int main() {                                
+//  clock_t begin = clock();	
+	FILE *myfile1;
+	myfile1 = fopen("Performance.txt", "w");
+	fprintf(myfile1, "Encoding	Decoding\n");
+	fclose(myfile1);
+
+	int counter = 0;
+	while (counter < 10) {
+		struct timeval start, stop;
+		gettimeofday(&start, NULL);
+		huffman();
+		gettimeofday(&stop, NULL);
+		double diffDec = stop.tv_usec - start.tv_usec;
+		double compTime = diffDec + (0.000001f * diffDec);
+		printf("\nTotal time: %0.4f microseconds\n", compTime);
+		if (counter != 0){
+			FILE *myfile2;
+			myfile2 = fopen("Performance.txt", "a+");
+			fprintf(myfile2, "%0.4f\n", compTime);
+			fclose(myfile2);
+		}
+		counter++;
 	}
 	return 0;
   
