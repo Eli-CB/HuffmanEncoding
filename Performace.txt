@@ -1,0 +1,2 @@
+Encoding	Decoding
+7049.0070	26732.0267
